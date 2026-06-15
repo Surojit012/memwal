@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemWal — Decentralised Agent Memory</title>
+  <meta name="description" content="MemWal provides Walrus-backed LangGraph checkpoint storage on Sui. Persistent, decentralised memory for AI agents." />
+  <meta property="og:title" content="MemWal — Decentralised Agent Memory" />
+  <meta property="og:description" content="Walrus-backed LangGraph checkpoint storage on Sui. Persistent, decentralised memory for AI agents." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=JetBrains+Mono:wght@100..900&display=swap" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/static/css/tokens.css" />
+  <link rel="stylesheet" href="/static/css/base.css" />
+  <link rel="stylesheet" href="/static/css/landing.css" />
+</head>
+<body>
+  <div class="landing">
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- Header                                                        -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <header class="landing-header" id="landing-header">
+      <a href="/" class="landing-header__brand">
+        <span class="landing-header__brand-icon">M</span>
+        <span>memwal</span>
+      </a>
+
+      <nav class="landing-header__nav" aria-label="primary">
+        <a href="#features" class="landing-header__link">features</a>
+        <a href="#workflow" class="landing-header__link">workflow</a>
+        <a href="#usecases" class="landing-header__link">use cases</a>
+        <a href="https://github.com/user/memwal" target="_blank" rel="noopener" class="landing-header__link">github ↗</a>
+      </nav>
+
+      <div class="landing-header__actions">
+        <a href="/playground" class="btn btn--primary btn--sm">→ playground</a>
+      </div>
+    </header>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- Hero                                                          -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <section class="hero" id="hero">
+      <div class="hero__grid" aria-hidden="true"></div>
+      <div class="hero__glow" aria-hidden="true"></div>
+
+      <div class="hero__content">
+        <div class="hero__eyebrow">
+          <span class="hero__eyebrow-dot"></span>
+          <span>decentralised agent infrastructure</span>
+        </div>
+
+        <h1 class="hero__title">
+          Persistent memory<br />
+          for <span class="hero__title-accent">AI agents</span>
+        </h1>
+
+        <p class="hero__subtitle">
+          Walrus-backed LangGraph checkpoint storage on Sui.
+          Store, retrieve, and manage agent memory across sessions —
+          decentralised, verifiable, permanent.
+        </p>
+
+        <div class="hero__ctas">
+          <a href="/playground" class="hero__cta-primary" id="cta-playground">
+            → Open Playground
+          </a>
+          <a href="https://github.com/user/memwal" target="_blank" rel="noopener" class="hero__cta-secondary" id="cta-docs">
+            ↗ Read Docs
+          </a>
+        </div>
+
+        <div class="hero__tech-badges">
+          <span class="hero__tech-badge">walrus</span>
+          <span class="hero__tech-badge">sui</span>
+          <span class="hero__tech-badge">langgraph</span>
+          <span class="hero__tech-badge">msgpack</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- Code Preview                                                  -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <section class="section reveal" id="code-section">
+      <div class="section__header">
+        <div class="section__eyebrow">drop-in replacement</div>
+        <h2 class="section__title">Three lines to decentralised memory</h2>
+        <p class="section__desc">
+          Replace SqliteSaver with WalrusCheckpointer. That's it.
+          Your agent's memory is now stored on Walrus and registered on the Sui blockchain.
+        </p>
+      </div>
+
+      <div class="code-preview">
+        <div class="code-preview__header">
+          <span class="code-preview__dot code-preview__dot--red"></span>
+          <span class="code-preview__dot code-preview__dot--yellow"></span>
+          <span class="code-preview__dot code-preview__dot--green"></span>
+          <span class="code-preview__filename">agent.py</span>
+        </div>
+        <pre class="code-preview__body"><span class="kw">from</span> memwal.checkpoint <span class="kw">import</span> <span class="fn">WalrusCheckpointer</span>
+
+<span class="cm"># One line — loads config from .env</span>
+checkpointer <span class="op">=</span> <span class="fn">WalrusCheckpointer</span><span class="op">.</span><span class="fn">from_env</span><span class="op">()</span>
+
+<span class="cm"># Drop-in replacement for SqliteSaver</span>
+graph <span class="op">=</span> builder<span class="op">.</span><span class="fn">compile</span><span class="op">(</span>checkpointer<span class="op">=</span>checkpointer<span class="op">)</span>
+
+<span class="cm"># Agent memory is now on Walrus + Sui</span>
+result <span class="op">=</span> graph<span class="op">.</span><span class="fn">invoke</span><span class="op">(</span>
+    <span class="op">{</span><span class="str">"messages"</span><span class="op">:</span> <span class="op">[</span><span class="fn">HumanMessage</span><span class="op">(</span>content<span class="op">=</span><span class="str">"Hello, remember me!"</span><span class="op">)]},</span>
+    config<span class="op">={</span><span class="str">"configurable"</span><span class="op">:</span> <span class="op">{</span><span class="str">"thread_id"</span><span class="op">:</span> <span class="str">"agent-001"</span><span class="op">}}</span>
+<span class="op">)</span></pre>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- Features                                                      -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <section class="section reveal" id="features">
+      <div class="section__header">
+        <div class="section__eyebrow">capabilities</div>
+        <h2 class="section__title">Everything you need</h2>
+        <p class="section__desc">
+          A complete decentralised memory layer for LangGraph agents.
+        </p>
+      </div>
+
+      <div class="features-grid" id="features-grid">
+        <div class="feature-card">
+          <div class="feature-card__icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          </div>
+          <h3 class="feature-card__title">Persistent Memory</h3>
+          <p class="feature-card__desc">Checkpoint data survives across sessions, machines, and deployments. Stored on Walrus, registered on Sui.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card__icon">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          </div>
+          <h3 class="feature-card__title">Blob Storage</h3>
+          <p class="feature-card__desc">Store arbitrary binary data as Walrus blobs. Automatic retry with exponential backoff on transient failures.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card__icon">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </div>
+          <h3 class="feature-card__title">Memory Retrieval</h3>
+          <p class="feature-card__desc">Fetch checkpoints by thread_id via the Sui on-chain registry. Any agent instance can resume any thread.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card__icon">
+            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <h3 class="feature-card__title">Agent Context</h3>
+          <p class="feature-card__desc">Thread-scoped checkpoints with namespace support. Multi-agent systems share a single registry.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card__icon">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+          </div>
+          <h3 class="feature-card__title">On-Chain Registry</h3>
+          <p class="feature-card__desc">Thread→blob mappings stored as Sui Move dynamic fields. Verifiable, transparent, immutable.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card__icon">
+            <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <h3 class="feature-card__title">API Playground</h3>
+          <p class="feature-card__desc">Interactive testing environment. Send requests, inspect responses, explore memory state in real-time.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- Workflow                                                      -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <section class="section reveal" id="workflow">
+      <div class="section__header">
+        <div class="section__eyebrow">architecture</div>
+        <h2 class="section__title">How it works</h2>
+        <p class="section__desc">
+          From agent input to decentralised storage and back.
+        </p>
+      </div>
+
+      <div class="workflow" id="workflow-diagram">
+        <div class="workflow__node">
+          <div class="workflow__node-icon">
+            <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <span class="workflow__node-label">Input</span>
+        </div>
+
+        <div class="workflow__connector">
+          <svg viewBox="0 0 40 2"><line class="workflow__connector-line" x1="0" y1="1" x2="40" y2="1"/></svg>
+        </div>
+
+        <div class="workflow__node">
+          <div class="workflow__node-icon">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          </div>
+          <span class="workflow__node-label">Process</span>
+        </div>
+
+        <div class="workflow__connector">
+          <svg viewBox="0 0 40 2"><line class="workflow__connector-line" x1="0" y1="1" x2="40" y2="1"/></svg>
+        </div>
+
+        <div class="workflow__node" style="border-color: var(--accent-dim);">
+          <div class="workflow__node-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          </div>
+          <span class="workflow__node-label">MemWal</span>
+        </div>
+
+        <div class="workflow__connector">
+          <svg viewBox="0 0 40 2"><line class="workflow__connector-line" x1="0" y1="1" x2="40" y2="1"/></svg>
+        </div>
+
+        <div class="workflow__node">
+          <div class="workflow__node-icon">
+            <svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+          </div>
+          <span class="workflow__node-label">Walrus</span>
+        </div>
+
+        <div class="workflow__connector">
+          <svg viewBox="0 0 40 2"><line class="workflow__connector-line" x1="0" y1="1" x2="40" y2="1"/></svg>
+        </div>
+
+        <div class="workflow__node">
+          <div class="workflow__node-icon">
+            <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+          </div>
+          <span class="workflow__node-label">Sui</span>
+        </div>
+
+        <div class="workflow__connector">
+          <svg viewBox="0 0 40 2"><line class="workflow__connector-line" x1="0" y1="1" x2="40" y2="1"/></svg>
+        </div>
+
+        <div class="workflow__node">
+          <div class="workflow__node-icon">
+            <svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          </div>
+          <span class="workflow__node-label">Output</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- Use Cases                                                     -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <section class="section reveal" id="usecases">
+      <div class="section__header">
+        <div class="section__eyebrow">applications</div>
+        <h2 class="section__title">Built for builders</h2>
+        <p class="section__desc">
+          From personal assistants to multi-agent orchestration systems.
+        </p>
+      </div>
+
+      <div class="usecases-grid" id="usecases-grid">
+        <div class="usecase-card">
+          <div class="usecase-card__icon">🤖</div>
+          <h3 class="usecase-card__title">AI Agents</h3>
+          <p class="usecase-card__desc">Give agents persistent, verifiable memory that survives across sessions and deployments.</p>
+        </div>
+
+        <div class="usecase-card">
+          <div class="usecase-card__icon">💬</div>
+          <h3 class="usecase-card__title">Personal Assistants</h3>
+          <p class="usecase-card__desc">Build assistants that remember conversations, preferences, and context permanently.</p>
+        </div>
+
+        <div class="usecase-card">
+          <div class="usecase-card__icon">🔗</div>
+          <h3 class="usecase-card__title">Multi-Agent Systems</h3>
+          <p class="usecase-card__desc">Coordinate agents through shared on-chain state. Any agent can resume any thread.</p>
+        </div>
+
+        <div class="usecase-card">
+          <div class="usecase-card__icon">📚</div>
+          <h3 class="usecase-card__title">Knowledge Workers</h3>
+          <p class="usecase-card__desc">Accumulate and retrieve structured knowledge over time with checkpoint versioning.</p>
+        </div>
+
+        <div class="usecase-card">
+          <div class="usecase-card__icon">🔬</div>
+          <h3 class="usecase-card__title">Research Agents</h3>
+          <p class="usecase-card__desc">Long-running research tasks with durable state. Resume from any checkpoint.</p>
+        </div>
+
+        <div class="usecase-card">
+          <div class="usecase-card__icon">🧠</div>
+          <h3 class="usecase-card__title">Long-term Memory</h3>
+          <p class="usecase-card__desc">Decentralised, permanent storage for agent memory. No single point of failure.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- CTA                                                           -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <section class="section reveal" style="text-align: center;">
+      <div class="section__eyebrow">get started</div>
+      <h2 class="section__title">Try MemWal now</h2>
+      <p class="section__desc" style="margin-bottom: var(--sp-8);">
+        Open the interactive playground to test every API endpoint, explore memory state, and build with templates.
+      </p>
+      <a href="/playground" class="hero__cta-primary" id="cta-bottom">→ Open Playground</a>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- Footer                                                        -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <footer class="landing-footer" id="footer">
+      <div class="landing-footer__links">
+        <a href="https://github.com/user/memwal" target="_blank" rel="noopener" class="landing-footer__link">GitHub</a>
+        <a href="https://github.com/user/memwal#readme" target="_blank" rel="noopener" class="landing-footer__link">Documentation</a>
+        <a href="/playground" class="landing-footer__link">API Playground</a>
+        <a href="https://discord.gg/memwal" target="_blank" rel="noopener" class="landing-footer__link">Community</a>
+      </div>
+      <div class="landing-footer__built">
+        <span>built with</span>
+        <span style="color: var(--accent-text);">walrus</span>
+        <span>+</span>
+        <span style="color: var(--accent-text);">sui</span>
+      </div>
+    </footer>
+
+  </div>
+
+  <script src="/static/js/landing.js"></script>
+</body>
+</html>
