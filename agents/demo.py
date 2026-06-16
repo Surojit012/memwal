@@ -1,44 +1,20 @@
-#!/usr/bin/env python3
-"""
-agents/demo.py — End-to-end demo of a LangGraph agent backed by MemWal.
-
-Shows how WalrusCheckpointer is a drop-in replacement for SqliteSaver.
-Checkpoint data is serialised with msgpack, stored on Walrus, and the
-thread_id -> blob_id mapping is recorded on the Sui blockchain.
-
-Usage:
-    python agents/demo.py
-
-If no LLM API key is configured (Anthropic or OpenAI), a deterministic
-mock LLM is used so the demo runs anywhere without external dependencies.
-"""
-
 from __future__ import annotations
-
 import os
 import sys
 import textwrap
 from typing import Any
-
 from langchain_core.messages import AIMessage, BaseMessage, HumanMessage
 from langgraph.graph import END, START, MessagesState, StateGraph
 
-# ---------------------------------------------------------------------------
-# LLM selection — prefer real providers, fall back to a mock
-# ---------------------------------------------------------------------------
 
 def _get_llm():
-    """Return the best available LLM, or a mock if none is configured."""
-
-    # --- Try Straico ------------------------------------------------------ #
     if os.environ.get("STRAICO_API_KEY"):
         model = os.environ.get("STRAICO_MODEL", "openai/gpt-4o-mini")
         print(f"[llm] Using Straico ({model})")
         return _StraicoLLM(model=model)
 
-    # --- Try Anthropic ---------------------------------------------------- #
     try:
-        from langchain_anthropic import ChatAnthropic  # type: ignore[import-untyped]
+        from langchain_anthropic import ChatAnthropic  
 
         if os.environ.get("ANTHROPIC_API_KEY"):
             print("[llm] Using ChatAnthropic (Claude)")
@@ -46,9 +22,8 @@ def _get_llm():
     except ImportError:
         pass
 
-    # --- Try OpenAI ------------------------------------------------------- #
     try:
-        from langchain_openai import ChatOpenAI  # type: ignore[import-untyped]
+        from langchain_openai import ChatOpenAI  
 
         if os.environ.get("OPENAI_API_KEY"):
             print("[llm] Using ChatOpenAI (GPT-4)")
@@ -56,14 +31,12 @@ def _get_llm():
     except ImportError:
         pass
 
-    # --- Mock LLM --------------------------------------------------------- #
     print("[llm] No API key found — using mock LLM")
     return _MockLLM()
 
 
 class _StraicoLLM:
-    """Minimal LangChain-like adapter for Straico chat completions."""
-
+    
     _API_URL = "https://api.straico.com/v2/chat/completions"
 
     def __init__(self, *, model: str) -> None:
@@ -99,7 +72,7 @@ class _StraicoLLM:
         return str(content)
 
     def invoke(self, messages: list[BaseMessage], **kwargs) -> AIMessage:
-        """Call Straico's OpenAI-compatible chat endpoint."""
+        
         import httpx
 
         straico_messages = [
@@ -160,12 +133,7 @@ class _StraicoLLM:
 
 
 class _MockLLM:
-    """Deterministic mock LLM that responds based on message history.
-
-    Produces predictable responses so the demo can validate checkpoint
-    restore without needing real API keys.
-    """
-
+    
     _RESPONSES = {
         0: "Hello from MemWal! I'll remember you. Your message has been "
            "stored on Walrus and registered on the Sui blockchain.",
@@ -175,23 +143,19 @@ class _MockLLM:
     _DEFAULT = "I'm the MemWal mock LLM. My memory is backed by Walrus + Sui."
 
     def invoke(self, messages: list[BaseMessage], **kwargs) -> AIMessage:
-        # Count prior AI messages to determine which response to give.
+        
         ai_count = sum(1 for m in messages if isinstance(m, AIMessage))
         text = self._RESPONSES.get(ai_count, self._DEFAULT)
         return AIMessage(content=text)
 
 
-# ---------------------------------------------------------------------------
-# Graph definition
-# ---------------------------------------------------------------------------
-
 def build_graph(checkpointer):
-    """Build a minimal LangGraph chat agent with the given checkpointer."""
+    
 
     llm = _get_llm()
 
     def chat_node(state: MessagesState) -> dict[str, list[BaseMessage]]:
-        """Process messages through the LLM and return the response."""
+        
         messages = state["messages"]
         response = llm.invoke(messages)
         return {"messages": [response]}
@@ -204,24 +168,19 @@ def build_graph(checkpointer):
     return builder.compile(checkpointer=checkpointer)
 
 
-# ---------------------------------------------------------------------------
-# Demo runner
-# ---------------------------------------------------------------------------
-
 THREAD_ID = "memwal-demo-thread-001"
 _LAST_BLOB_ID: str | None = None
 _LAST_TX_DIGEST: str | None = None
 
 BANNER = """
 ╔══════════════════════════════════════════════════════════════╗
-║            MemWal — Decentralised Agent Memory              ║
-║         Walrus (storage) + Sui (on-chain registry)          ║
+║            MemWal — Decentralised Agent Memory               ║
+║         Walrus (storage) + Sui (on-chain registry)           ║
 ╚══════════════════════════════════════════════════════════════╝
 """
 
-
 def _fmt(msg: BaseMessage) -> str:
-    """Format a message for console output."""
+    
     role = msg.__class__.__name__.replace("Message", "")
     content = str(msg.content)
     wrapped = textwrap.fill(content, width=60, subsequent_indent="         ")
@@ -229,7 +188,7 @@ def _fmt(msg: BaseMessage) -> str:
 
 
 def _install_checkpoint_tracing() -> None:
-    """Trace MemWal storage calls made by the checkpointer module."""
+    
     import memwal.checkpoint as checkpoint_module
 
     if getattr(checkpoint_module, "_memwal_demo_tracing_installed", False):
@@ -274,7 +233,6 @@ def _install_checkpoint_tracing() -> None:
 def main() -> None:
     print(BANNER)
 
-    # ---- Build checkpointer --------------------------------------------- #
     print("[setup] Loading config from environment / .env ...")
     from memwal.checkpoint import WalrusCheckpointer
 
@@ -284,15 +242,12 @@ def main() -> None:
     print(f"[setup] Thread ID: {THREAD_ID}")
     print()
 
-    # ---- Build graph ----------------------------------------------------- #
     graph = build_graph(checkpointer)
     run_config: dict[str, Any] = {
         "configurable": {"thread_id": THREAD_ID},
     }
 
-    # ================================================================== #
-    #  RUN 1 — First message, creates a new checkpoint                   #
-    # ================================================================== #
+    
     print("=" * 62)
     print("  RUN 1: First interaction (new checkpoint)")
     print("=" * 62)
@@ -306,17 +261,14 @@ def main() -> None:
     print("[sui]    Registering thread -> blob mapping on Sui ...")
     result1 = graph.invoke({"messages": [msg1]}, config=run_config)
 
-    # Display response
+    
     for m in result1["messages"]:
         print(_fmt(m))
     print()
 
     print(f"[done]   Thread '{THREAD_ID}' checkpoint stored successfully.")
     print()
-
-    # ================================================================== #
-    #  RUN 2 — Second message, resumes from checkpoint                   #
-    # ================================================================== #
+    
     print("=" * 62)
     print("  RUN 2: Follow-up interaction (restoring from checkpoint)")
     print("=" * 62)
@@ -330,7 +282,6 @@ def main() -> None:
     print("[walrus] Fetching checkpoint from Walrus ...")
     result2 = graph.invoke({"messages": [msg2]}, config=run_config)
 
-    # Display full message history (proves checkpoint was restored)
     print("[history] Full message history (from checkpoint):")
     for m in result2["messages"]:
         print(_fmt(m))
@@ -340,26 +291,25 @@ def main() -> None:
     print(f"[done]   {msg_count} messages in thread — checkpoint restore verified!")
     print()
 
-    # ---- Summary --------------------------------------------------------- #
     print("=" * 62)
     print("  SUMMARY")
     print("=" * 62)
     print(f"""
-  Thread ID:      {THREAD_ID}
-  Blob ID:        {_LAST_BLOB_ID}
-  Tx Digest:      {_LAST_TX_DIGEST}
-  Sui Explorer:   https://suiscan.xyz/testnet/tx/{_LAST_TX_DIGEST}
-  Walrus Blob:    https://aggregator.walrus-testnet.walrus.space/v1/blobs/{_LAST_BLOB_ID}
-  Messages:       {msg_count}
-  Checkpointer:   WalrusCheckpointer
-  Storage:        Walrus (decentralised blob store)
-  Registry:       Sui blockchain (on-chain thread -> blob mapping)
-  Serialisation:  msgpack
+    Thread ID:      {THREAD_ID}
+    Blob ID:        {_LAST_BLOB_ID}
+    Tx Digest:      {_LAST_TX_DIGEST}
+    Sui Explorer:   https://suiscan.xyz/testnet/tx/{_LAST_TX_DIGEST}
+    Walrus Blob:    https://aggregator.walrus-testnet.walrus.space/v1/blobs/{_LAST_BLOB_ID}
+    Messages:       {msg_count}
+    Checkpointer:   WalrusCheckpointer
+    Storage:        Walrus (decentralised blob store)
+    Registry:       Sui blockchain (on-chain thread -> blob mapping)
+    Serialisation:  msgpack
 
-  The agent's memory is now stored on Walrus and registered
-  on the Sui blockchain. Any agent instance — on any machine —
-  can resume this thread by looking up the thread ID on-chain.
-""")
+    The agent's memory is now stored on Walrus and registered
+    on the Sui blockchain. Any agent instance — on any machine —
+    can resume this thread by looking up the thread ID on-chain.
+    """)
 
 
 if __name__ == "__main__":

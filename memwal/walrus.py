@@ -1,34 +1,10 @@
-"""
-memwal.walrus — Async HTTP client for the Walrus blob store.
-
-Provides store and fetch operations against the Walrus publisher /
-aggregator endpoints with automatic retry (3 attempts, exponential
-backoff) for transient failures.
-"""
-
 from __future__ import annotations
-
 import asyncio
 from typing import Optional
-
 import httpx
 
 
-# ---------------------------------------------------------------------------
-# Custom exception
-# ---------------------------------------------------------------------------
-
 class WalrusError(Exception):
-    """Raised when a Walrus HTTP operation fails.
-
-    Attributes
-    ----------
-    status_code : int | None
-        HTTP status code returned by Walrus (None for non-HTTP errors).
-    response_body : str | None
-        Raw response body, useful for debugging.
-    """
-
     def __init__(
         self,
         message: str,
@@ -41,36 +17,13 @@ class WalrusError(Exception):
         super().__init__(message)
 
 
-# ---------------------------------------------------------------------------
-# Retry helper
-# ---------------------------------------------------------------------------
-
 _MAX_RETRIES: int = 3
-_BACKOFF_BASE: float = 0.5  # seconds — 0.5, 1.0, 2.0
-
-# Status codes that are safe to retry on.
+_BACKOFF_BASE: float = 0.5  
 _RETRYABLE_STATUS_CODES: frozenset[int] = frozenset({408, 429, 500, 502, 503, 504})
 
 
 async def _retry_async(coro_factory, *, max_retries: int = _MAX_RETRIES):
-    """Execute an async callable with exponential-backoff retries.
-
-    Parameters
-    ----------
-    coro_factory:
-        A zero-argument callable that returns a *new* awaitable each call.
-    max_retries:
-        Total number of attempts (including the first).
-
-    Returns
-    -------
-    The value returned by the awaitable on success.
-
-    Raises
-    ------
-    WalrusError
-        After all retries are exhausted.
-    """
+    
     last_exc: Optional[Exception] = None
 
     for attempt in range(1, max_retries + 1):
@@ -78,16 +31,16 @@ async def _retry_async(coro_factory, *, max_retries: int = _MAX_RETRIES):
             return await coro_factory()
         except WalrusError as exc:
             last_exc = exc
-            # Only retry on transient HTTP errors.
+            
             if exc.status_code is not None and exc.status_code in _RETRYABLE_STATUS_CODES:
                 if attempt < max_retries:
                     delay = _BACKOFF_BASE * (2 ** (attempt - 1))
                     await asyncio.sleep(delay)
                     continue
-            # Non-retryable error — raise immediately.
+            
             raise
         except httpx.TransportError as exc:
-            # Network-level failures (DNS, connection reset, timeout, …).
+            
             last_exc = exc
             if attempt < max_retries:
                 delay = _BACKOFF_BASE * (2 ** (attempt - 1))
@@ -97,37 +50,13 @@ async def _retry_async(coro_factory, *, max_retries: int = _MAX_RETRIES):
                 f"Walrus request failed after {max_retries} attempts: {exc}",
             ) from exc
 
-    # Should never reach here, but satisfy the type checker.
-    raise WalrusError(  # pragma: no cover
+    
+    raise WalrusError(  
         f"Walrus request failed after {max_retries} attempts",
     ) from last_exc
 
 
-# ---------------------------------------------------------------------------
-# Client
-# ---------------------------------------------------------------------------
-
 class WalrusClient:
-    """Async HTTP client for Walrus blob storage.
-
-    Parameters
-    ----------
-    publisher_url:
-        Base URL of the Walrus publisher (store) endpoint.
-    aggregator_url:
-        Base URL of the Walrus aggregator (read) endpoint.
-    timeout:
-        Per-request timeout in seconds (default 30).
-
-    Usage
-    -----
-    >>> from memwal.config import load_config
-    >>> cfg = load_config()
-    >>> async with WalrusClient(cfg.WALRUS_PUBLISHER, cfg.WALRUS_AGGREGATOR) as client:
-    ...     blob_id = await client.store_blob(b"hello", epochs=5)
-    ...     data   = await client.fetch_blob(blob_id)
-    """
-
     def __init__(
         self,
         publisher_url: str,
@@ -140,8 +69,6 @@ class WalrusClient:
         self._timeout = timeout
         self._client: Optional[httpx.AsyncClient] = None
 
-    # -- Context-manager protocol ------------------------------------------ #
-
     async def __aenter__(self) -> "WalrusClient":
         self._client = httpx.AsyncClient(timeout=self._timeout)
         return self
@@ -151,24 +78,14 @@ class WalrusClient:
             await self._client.aclose()
             self._client = None
 
-    # -- Internal helpers -------------------------------------------------- #
 
     def _get_client(self) -> httpx.AsyncClient:
-        """Return the active ``httpx.AsyncClient``, creating one if needed."""
         if self._client is None:
             self._client = httpx.AsyncClient(timeout=self._timeout)
         return self._client
 
     @staticmethod
     def _extract_blob_id(body: dict) -> str:
-        """Extract ``blobId`` from either Walrus response shape.
-
-        Shape 1 — newly created:
-            { "newlyCreated": { "blobObject": { "blobId": "..." } } }
-
-        Shape 2 — already certified:
-            { "alreadyCertified": { "blobId": "..." } }
-        """
         if "newlyCreated" in body:
             try:
                 return body["newlyCreated"]["blobObject"]["blobId"]
@@ -190,29 +107,8 @@ class WalrusClient:
             f"'alreadyCertified': {body}"
         )
 
-    # -- Public API -------------------------------------------------------- #
-
+    
     async def store_blob(self, data: bytes, epochs: int) -> str:
-        """Store *data* as a Walrus blob and return its ``blob_id``.
-
-        Parameters
-        ----------
-        data:
-            Raw bytes to persist.
-        epochs:
-            Number of Walrus storage epochs to request.
-
-        Returns
-        -------
-        str
-            The Walrus ``blobId``.
-
-        Raises
-        ------
-        WalrusError
-            On HTTP or parsing failure (after retries).
-        """
-
         url = f"{self._publisher_url}/v1/blobs?epochs={epochs}"
         client = self._get_client()
 
@@ -240,24 +136,6 @@ class WalrusClient:
         return await _retry_async(_do_store)
 
     async def fetch_blob(self, blob_id: str) -> bytes:
-        """Fetch a previously stored blob by its *blob_id*.
-
-        Parameters
-        ----------
-        blob_id:
-            The Walrus ``blobId`` returned by :meth:`store_blob`.
-
-        Returns
-        -------
-        bytes
-            The raw blob content.
-
-        Raises
-        ------
-        WalrusError
-            On HTTP failure (after retries).
-        """
-
         url = f"{self._aggregator_url}/v1/blobs/{blob_id}"
         client = self._get_client()
 

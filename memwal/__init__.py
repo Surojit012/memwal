@@ -1,5 +1,3 @@
-"""MemWal — Walrus-backed LangGraph checkpoint storage on Sui."""
-
 from memwal.checkpoint import WalrusCheckpointer
 from memwal.config import Config, load_config
 from memwal.sui import SuiRegistry, SuiRegistryError

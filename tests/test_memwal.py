@@ -1,11 +1,8 @@
 from __future__ import annotations
-
 import time
 from datetime import datetime, timezone
 from typing import Any
-
 import pytest
-
 from memwal.checkpoint import WalrusCheckpointer
 from memwal.config import Config, load_config
 from memwal.sui import SuiRegistry
