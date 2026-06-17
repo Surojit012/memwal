@@ -1,12 +1,5 @@
-/* ============================================================================
-   MemWal Landing Page — Animations & Interactions
-   ============================================================================ */
-
 (function () {
   'use strict';
-
-  // ── Scroll Reveal ─────────────────────────────────────────────────────
-  // Uses IntersectionObserver for staggered fade-in on scroll
 
   function initScrollReveal() {
     var revealEls = document.querySelectorAll('.reveal');
@@ -28,9 +21,6 @@
       observer.observe(el);
     });
   }
-
-  // ── Feature Card Stagger ──────────────────────────────────────────────
-  // Add staggered reveal to feature cards and use case cards
 
   function initCardStagger() {
     var grids = [
@@ -68,7 +58,6 @@
     });
   }
 
-  // ── Header Scroll Effect ──────────────────────────────────────────────
 
   function initHeaderScroll() {
     var header = document.getElementById('landing-header');
@@ -93,7 +82,6 @@
     );
   }
 
-  // ── Smooth Anchor Scrolling ───────────────────────────────────────────
 
   function initSmoothAnchors() {
     document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
@@ -109,8 +97,6 @@
     });
   }
 
-  // ── Workflow Connector Animation ──────────────────────────────────────
-  // Animate the workflow connectors when visible
 
   function initWorkflowAnimation() {
     var diagram = document.getElementById('workflow-diagram');
@@ -156,7 +142,6 @@
     observer.observe(diagram);
   }
 
-  // ── Init ──────────────────────────────────────────────────────────────
 
   document.addEventListener('DOMContentLoaded', function () {
     initScrollReveal();

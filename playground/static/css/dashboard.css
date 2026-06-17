@@ -1,17 +1,9 @@
-/* ============================================================================
-   MemWal Playground Dashboard Styles
-   Three-panel layout: sidebar | workspace | inspector
-   ============================================================================ */
-
-/* ── Dashboard Shell ───────────────────────────────────────────────────── */
-
 .dashboard {
   display: flex;
   height: 100vh;
   overflow: hidden;
 }
 
-/* ── Top Header Bar ────────────────────────────────────────────────────── */
 
 .dash-header {
   position: fixed;
@@ -80,7 +72,6 @@
   color: var(--text-muted);
 }
 
-/* ── Left Sidebar ──────────────────────────────────────────────────────── */
 
 .sidebar {
   width: var(--sidebar-width);
@@ -181,7 +172,6 @@
   font-family: var(--font-mono);
 }
 
-/* ── Main Workspace ────────────────────────────────────────────────────── */
 
 .workspace {
   flex: 1;
@@ -196,7 +186,6 @@
   min-height: calc(100vh - var(--header-height));
 }
 
-/* Panel containers */
 .panel {
   display: none;
   animation: fadeIn var(--duration-normal) var(--ease-out);
@@ -225,7 +214,6 @@
   margin-top: var(--sp-1);
 }
 
-/* ── Right Inspector Panel ─────────────────────────────────────────────── */
 
 .inspector {
   width: var(--right-panel-width);
@@ -284,7 +272,6 @@
   animation: fadeIn var(--duration-normal) var(--ease-out);
 }
 
-/* Inspector sections */
 .inspector__section {
   margin-bottom: var(--sp-5);
 }
@@ -326,7 +313,6 @@
   word-break: break-all;
 }
 
-/* ── API Tester ────────────────────────────────────────────────────────── */
 
 .api-tester {
   display: flex;
@@ -355,9 +341,17 @@
   min-width: 60px;
 }
 
-.api-tester__method--post { color: var(--status-warning); }
-.api-tester__method--get  { color: var(--status-success); }
-.api-tester__method--put  { color: var(--status-info); }
+.api-tester__method--post {
+  color: var(--status-warning);
+}
+
+.api-tester__method--get {
+  color: var(--status-success);
+}
+
+.api-tester__method--put {
+  color: var(--status-info);
+}
 
 .api-tester__url {
   flex: 1;
@@ -374,7 +368,6 @@
   min-width: 100px;
 }
 
-/* Endpoint selector */
 .api-tester__selector {
   display: flex;
   gap: 1px;
@@ -406,7 +399,6 @@
   background: var(--bg-elevated);
 }
 
-/* Params form */
 .api-tester__params {
   background: var(--bg-surface);
   border: 1px solid var(--border-default);
@@ -465,7 +457,6 @@
   box-shadow: 0 0 0 3px var(--accent-muted);
 }
 
-/* Response viewer */
 .api-tester__response {
   border: 1px solid var(--border-default);
   overflow: hidden;
@@ -500,8 +491,13 @@
   font-weight: var(--weight-bold);
 }
 
-.api-tester__response-status--ok { color: var(--status-success); }
-.api-tester__response-status--err { color: var(--status-error); }
+.api-tester__response-status--ok {
+  color: var(--status-success);
+}
+
+.api-tester__response-status--err {
+  color: var(--status-error);
+}
 
 .api-tester__response-time {
   font-size: var(--text-xs);
@@ -521,15 +517,30 @@
   word-break: break-word;
 }
 
-/* JSON syntax highlighting */
-.json-key     { color: var(--syntax-key); }
-.json-string  { color: var(--syntax-string); }
-.json-number  { color: var(--syntax-number); }
-.json-boolean { color: var(--syntax-bool); }
-.json-null    { color: var(--syntax-null); }
-.json-bracket { color: var(--syntax-bracket); }
+.json-key {
+  color: var(--syntax-key);
+}
 
-/* ── Memory Explorer ───────────────────────────────────────────────────── */
+.json-string {
+  color: var(--syntax-string);
+}
+
+.json-number {
+  color: var(--syntax-number);
+}
+
+.json-boolean {
+  color: var(--syntax-bool);
+}
+
+.json-null {
+  color: var(--syntax-null);
+}
+
+.json-bracket {
+  color: var(--syntax-bracket);
+}
+
 
 .memory-explorer {
   display: flex;
@@ -626,7 +637,6 @@
   word-break: break-all;
 }
 
-/* ── File Explorer ─────────────────────────────────────────────────────── */
 
 .file-explorer {
   display: flex;
@@ -744,7 +754,6 @@
   flex-shrink: 0;
 }
 
-/* ── Examples / Templates ──────────────────────────────────────────────── */
 
 .templates-grid {
   display: grid;
@@ -800,7 +809,6 @@
   border-radius: var(--radius-sm);
 }
 
-/* ── Logs Panel ────────────────────────────────────────────────────────── */
 
 .logs {
   display: flex;
@@ -842,17 +850,27 @@
   min-width: 40px;
 }
 
-.log-entry__level--info    { color: var(--status-info); }
-.log-entry__level--success { color: var(--status-success); }
-.log-entry__level--warn    { color: var(--status-warning); }
-.log-entry__level--error   { color: var(--status-error); }
+.log-entry__level--info {
+  color: var(--status-info);
+}
+
+.log-entry__level--success {
+  color: var(--status-success);
+}
+
+.log-entry__level--warn {
+  color: var(--status-warning);
+}
+
+.log-entry__level--error {
+  color: var(--status-error);
+}
 
 .log-entry__msg {
   color: var(--text-secondary);
   word-break: break-all;
 }
 
-/* ── Settings ──────────────────────────────────────────────────────────── */
 
 .settings {
   max-width: 600px;
@@ -896,7 +914,6 @@
   font-size: var(--text-sm);
 }
 
-/* ── Empty States ──────────────────────────────────────────────────────── */
 
 .empty-state {
   display: flex;
@@ -936,7 +953,6 @@
   max-width: 360px;
 }
 
-/* ── Loading Overlay ───────────────────────────────────────────────────── */
 
 .loading-overlay {
   position: absolute;
@@ -948,12 +964,12 @@
   z-index: var(--z-overlay);
 }
 
-/* ── Responsive ────────────────────────────────────────────────────────── */
 
 @media (max-width: 1200px) {
   .inspector {
     display: none;
   }
+
   .templates-grid {
     grid-template-columns: 1fr;
   }

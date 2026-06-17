@@ -1,11 +1,6 @@
-/* ============================================================================
-   MemWal API Tester Panel
-   ============================================================================ */
 
 var ApiTester = (function () {
   'use strict';
-
-  // ── Endpoint definitions ───────────────────────────────────────────────
 
   var ENDPOINTS = {
     'store-blob': {
@@ -87,15 +82,12 @@ var ApiTester = (function () {
 
   var currentEndpoint = 'store-blob';
 
-  // ── Render params form ─────────────────────────────────────────────────
-
   function renderParams(endpointKey) {
     var endpoint = ENDPOINTS[endpointKey];
     if (!endpoint) return;
 
     currentEndpoint = endpointKey;
 
-    // Update method and URL display
     var methodEl = document.getElementById('endpoint-method');
     var urlEl = document.getElementById('endpoint-url');
 
@@ -107,13 +99,11 @@ var ApiTester = (function () {
       urlEl.textContent = endpoint.url;
     }
 
-    // Update selector active state
     var selectorBtns = document.querySelectorAll('.api-tester__selector-btn');
     selectorBtns.forEach(function (btn) {
       btn.classList.toggle('is-active', btn.dataset.endpoint === endpointKey);
     });
 
-    // Render param fields
     var formEl = document.getElementById('params-form');
     if (!formEl) return;
 
@@ -133,7 +123,6 @@ var ApiTester = (function () {
 
     formEl.innerHTML = html;
 
-    // Auto-fill blob_id from last response if applicable
     if (endpointKey === 'fetch-blob' || endpointKey === 'register') {
       var blobInput = document.getElementById('param-blob_id');
       if (blobInput && MemwalAPI.state.lastBlobId) {
@@ -142,20 +131,17 @@ var ApiTester = (function () {
     }
   }
 
-  // ── Send request ───────────────────────────────────────────────────────
 
   function sendRequest() {
     var endpoint = ENDPOINTS[currentEndpoint];
     if (!endpoint) return;
 
-    // Collect params
     var params = {};
     endpoint.params.forEach(function (param) {
       var el = document.getElementById('param-' + param.key);
       params[param.key] = el ? el.value : '';
     });
 
-    // UI: loading state
     var sendBtn = document.getElementById('send-btn');
     var sendText = document.getElementById('send-btn-text');
     var sendSpinner = document.getElementById('send-btn-spinner');
@@ -171,12 +157,10 @@ var ApiTester = (function () {
     if (responseTime) responseTime.textContent = '';
 
     endpoint.execute(params).then(function (result) {
-      // UI: restore
       if (sendBtn) sendBtn.disabled = false;
       if (sendText) sendText.textContent = 'Send';
       if (sendSpinner) sendSpinner.style.display = 'none';
 
-      // Display response
       if (responseStatus) {
         responseStatus.textContent = 'HTTP ' + result.status;
         responseStatus.className = 'api-tester__response-status ' +
@@ -191,10 +175,7 @@ var ApiTester = (function () {
     });
   }
 
-  // ── Init ───────────────────────────────────────────────────────────────
-
   function init() {
-    // Endpoint selector buttons
     var selectorBtns = document.querySelectorAll('.api-tester__selector-btn');
     selectorBtns.forEach(function (btn) {
       btn.addEventListener('click', function () {
@@ -202,13 +183,11 @@ var ApiTester = (function () {
       });
     });
 
-    // Send button
     var sendBtn = document.getElementById('send-btn');
     if (sendBtn) {
       sendBtn.addEventListener('click', sendRequest);
     }
 
-    // Keyboard: Enter to send
     var paramsForm = document.getElementById('params-form');
     if (paramsForm) {
       paramsForm.addEventListener('keydown', function (e) {
@@ -226,7 +205,6 @@ var ApiTester = (function () {
     sendRequest: sendRequest,
     loadTemplate: function (endpointKey, params) {
       renderParams(endpointKey);
-      // Fill in template values
       if (params) {
         Object.keys(params).forEach(function (key) {
           var el = document.getElementById('param-' + key);

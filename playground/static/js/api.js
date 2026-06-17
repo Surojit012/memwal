@@ -1,14 +1,7 @@
-/* ============================================================================
-   MemWal API Client
-   Communicates with the bridge server at /api/*
-   ============================================================================ */
-
 var MemwalAPI = (function () {
   'use strict';
 
-  var BASE_URL = '';  // Same origin
-
-  // ── State ──────────────────────────────────────────────────────────────
+  var BASE_URL = '';
   var state = {
     connected: false,
     requestCount: 0,
@@ -22,7 +15,6 @@ var MemwalAPI = (function () {
     config: null
   };
 
-  // ── Logger ─────────────────────────────────────────────────────────────
   var logListeners = [];
 
   function onLog(fn) {
@@ -36,7 +28,6 @@ var MemwalAPI = (function () {
     logListeners.forEach(function (fn) { fn(entry); });
   }
 
-  // ── State change listeners ─────────────────────────────────────────────
   var stateListeners = [];
 
   function onStateChange(fn) {
@@ -47,7 +38,6 @@ var MemwalAPI = (function () {
     stateListeners.forEach(function (fn) { fn(state); });
   }
 
-  // ── HTTP helpers ───────────────────────────────────────────────────────
 
   function request(method, path, body) {
     var url = BASE_URL + path;
@@ -106,7 +96,6 @@ var MemwalAPI = (function () {
       });
   }
 
-  // ── Public API methods ─────────────────────────────────────────────────
 
   function healthCheck() {
     return request('GET', '/api/health')
@@ -231,8 +220,6 @@ var MemwalAPI = (function () {
       });
   }
 
-  // ── JSON syntax highlight ──────────────────────────────────────────────
-
   function highlightJSON(obj) {
     var json = JSON.stringify(obj, null, 2);
     if (!json) return '';
@@ -247,7 +234,6 @@ var MemwalAPI = (function () {
       .replace(/: (null)/g, ': <span class="json-null">$1</span>');
   }
 
-  // ── Expose ─────────────────────────────────────────────────────────────
 
   return {
     state: state,

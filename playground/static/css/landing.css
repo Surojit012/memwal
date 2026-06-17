@@ -1,16 +1,9 @@
-/* ============================================================================
-   MemWal Landing Page Styles
-   ============================================================================ */
-
-/* ── Page Layout ───────────────────────────────────────────────────────── */
-
 .landing {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
-/* ── Header ────────────────────────────────────────────────────────────── */
 
 .landing-header {
   position: fixed;
@@ -78,7 +71,6 @@
   gap: var(--sp-3);
 }
 
-/* ── Hero ──────────────────────────────────────────────────────────────── */
 
 .hero {
   position: relative;
@@ -247,7 +239,6 @@
   border-radius: var(--radius-sm);
 }
 
-/* ── Section ───────────────────────────────────────────────────────────── */
 
 .section {
   padding: var(--sp-24) var(--sp-6);
@@ -283,7 +274,6 @@
   margin: 0 auto;
 }
 
-/* ── Features Grid ─────────────────────────────────────────────────────── */
 
 .features-grid {
   display: grid;
@@ -297,7 +287,7 @@
   background: var(--bg-surface);
   padding: var(--sp-8);
   transition: background var(--duration-normal) var(--ease-default),
-              transform var(--duration-normal) var(--ease-default);
+    transform var(--duration-normal) var(--ease-default);
 }
 
 .feature-card:hover {
@@ -336,7 +326,6 @@
   line-height: var(--leading-relaxed);
 }
 
-/* ── Workflow ──────────────────────────────────────────────────────────── */
 
 .workflow {
   display: flex;
@@ -358,7 +347,7 @@
   min-width: 120px;
   text-align: center;
   transition: border-color var(--duration-normal) var(--ease-default),
-              transform var(--duration-normal) var(--ease-default);
+    transform var(--duration-normal) var(--ease-default);
   flex-shrink: 0;
 }
 
@@ -413,7 +402,6 @@
   }
 }
 
-/* ── Use Cases ─────────────────────────────────────────────────────────── */
 
 .usecases-grid {
   display: grid;
@@ -426,7 +414,7 @@
   background: var(--bg-surface);
   border: 1px solid var(--border-default);
   transition: border-color var(--duration-normal) var(--ease-default),
-              transform var(--duration-normal) var(--ease-default);
+    transform var(--duration-normal) var(--ease-default);
 }
 
 .usecase-card:hover {
@@ -451,7 +439,6 @@
   line-height: var(--leading-relaxed);
 }
 
-/* ── Code Preview ──────────────────────────────────────────────────────── */
 
 .code-preview {
   max-width: 680px;
@@ -476,9 +463,17 @@
   border-radius: 50%;
 }
 
-.code-preview__dot--red    { background: #f87171; }
-.code-preview__dot--yellow { background: #fbbf24; }
-.code-preview__dot--green  { background: #34d399; }
+.code-preview__dot--red {
+  background: #f87171;
+}
+
+.code-preview__dot--yellow {
+  background: #fbbf24;
+}
+
+.code-preview__dot--green {
+  background: #34d399;
+}
 
 .code-preview__filename {
   font-size: var(--text-xs);
@@ -496,13 +491,27 @@
   overflow-x: auto;
 }
 
-.code-preview__body .kw  { color: var(--syntax-key); }
-.code-preview__body .str { color: var(--syntax-string); }
-.code-preview__body .fn  { color: #60a5fa; }
-.code-preview__body .cm  { color: var(--text-muted); font-style: italic; }
-.code-preview__body .op  { color: var(--text-tertiary); }
+.code-preview__body .kw {
+  color: var(--syntax-key);
+}
 
-/* ── Footer ────────────────────────────────────────────────────────────── */
+.code-preview__body .str {
+  color: var(--syntax-string);
+}
+
+.code-preview__body .fn {
+  color: #60a5fa;
+}
+
+.code-preview__body .cm {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.code-preview__body .op {
+  color: var(--text-tertiary);
+}
+
 
 .landing-footer {
   border-top: 1px solid var(--border-default);
@@ -539,12 +548,12 @@
   font-family: var(--font-mono);
 }
 
-/* ── Responsive ────────────────────────────────────────────────────────── */
 
 @media (max-width: 1024px) {
   .features-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+
   .usecases-grid {
     grid-template-columns: repeat(2, 1fr);
   }

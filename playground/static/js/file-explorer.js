@@ -1,7 +1,3 @@
-/* ============================================================================
-   MemWal File Explorer Panel
-   ============================================================================ */
-
 var FileExplorer = (function () {
   'use strict';
 
@@ -13,7 +9,6 @@ var FileExplorer = (function () {
 
     if (!zone || !fileInput) return;
 
-    // Click to upload
     zone.addEventListener('click', function () {
       fileInput.click();
     });
@@ -25,7 +20,6 @@ var FileExplorer = (function () {
       this.value = '';
     });
 
-    // Drag and drop
     zone.addEventListener('dragover', function (e) {
       e.preventDefault();
       e.stopPropagation();

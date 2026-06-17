@@ -1,7 +1,3 @@
-/* ============================================================================
-   MemWal Example Templates
-   ============================================================================ */
-
 var Templates = (function () {
   'use strict';
 
@@ -133,7 +129,6 @@ var Templates = (function () {
 
     container.innerHTML = html;
 
-    // Attach click handlers
     container.querySelectorAll('.template-card').forEach(function (card) {
       card.addEventListener('click', function () {
         var idx = parseInt(this.dataset.templateIdx);
@@ -148,12 +143,10 @@ var Templates = (function () {
 
     MemwalAPI.log('info', 'Loading template: ' + tpl.title);
 
-    // Switch to playground panel and load the template
     if (typeof Dashboard !== 'undefined' && Dashboard.switchPanel) {
       Dashboard.switchPanel('playground');
     }
 
-    // Load into API tester
     if (typeof ApiTester !== 'undefined' && ApiTester.loadTemplate) {
       ApiTester.loadTemplate(tpl.endpoint, tpl.params);
     }

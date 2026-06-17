@@ -1,7 +1,3 @@
-/* ============================================================================
-   MemWal Memory Explorer Panel
-   ============================================================================ */
-
 var MemoryExplorer = (function () {
   'use strict';
 
@@ -38,7 +34,6 @@ var MemoryExplorer = (function () {
 
     resultsContainer.innerHTML = '<div class="empty-state"><div class="spinner spinner--lg"></div><p class="text-sm text-muted" style="margin-top: var(--sp-4);">Looking up thread on Sui...</p></div>';
 
-    // First lookup the blob_id
     MemwalAPI.lookupThread(threadId).then(function (lookupResult) {
       if (!lookupResult.ok) {
         renderError(resultsContainer, 'Lookup failed', lookupResult.data);
@@ -51,7 +46,6 @@ var MemoryExplorer = (function () {
         return;
       }
 
-      // Now fetch the blob data
       MemwalAPI.fetchBlob(blobId).then(function (fetchResult) {
         renderTimeline(resultsContainer, threadId, blobId, lookupResult, fetchResult);
       });
@@ -79,7 +73,6 @@ var MemoryExplorer = (function () {
   function renderTimeline(container, threadId, blobId, lookupResult, fetchResult) {
     var html = '<div class="memory-explorer__timeline">';
 
-    // Registry entry
     html += '<div class="memory-explorer__entry">';
     html += '  <div class="memory-explorer__entry-header">';
     html += '    <span class="memory-explorer__entry-thread">' + escapeHtml(threadId) + '</span>';
@@ -95,7 +88,6 @@ var MemoryExplorer = (function () {
     html += '  </div>';
     html += '</div>';
 
-    // Blob data entry
     html += '<div class="memory-explorer__entry">';
     html += '  <div class="memory-explorer__entry-header">';
     html += '    <span class="memory-explorer__entry-thread">Blob Data</span>';
@@ -118,7 +110,6 @@ var MemoryExplorer = (function () {
 
     html += '</div>';
 
-    // Explorer links
     html += '<div style="margin-top: var(--sp-4); display: flex; gap: var(--sp-3);">';
     html += '  <a href="https://suiscan.xyz/testnet/object/' + escapeHtml(blobId) + '" target="_blank" class="btn btn--ghost btn--sm">View on SuiScan ↗</a>';
     html += '  <a href="https://aggregator.walrus-testnet.walrus.space/v1/blobs/' + encodeURIComponent(blobId) + '" target="_blank" class="btn btn--ghost btn--sm">View on Walrus ↗</a>';

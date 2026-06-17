@@ -1,25 +1,17 @@
-/* ============================================================================
-   MemWal Dashboard — Main orchestrator
-   Wires up sidebar navigation, inspector tabs, logging, and state updates.
-   ============================================================================ */
-
 var Dashboard = (function () {
   'use strict';
 
-  // ── Panel switching ────────────────────────────────────────────────────
-
   function switchPanel(panelId) {
-    // Update sidebar
     document.querySelectorAll('.sidebar__item').forEach(function (item) {
       item.classList.toggle('is-active', item.dataset.panel === panelId);
     });
 
-    // Update panels
+
     document.querySelectorAll('.panel').forEach(function (panel) {
       panel.classList.toggle('is-active', panel.id === 'panel-' + panelId);
     });
 
-    // Update header page title
+
     var headerTitle = document.getElementById('header-page-title');
     if (headerTitle) {
       var labels = {
@@ -35,7 +27,7 @@ var Dashboard = (function () {
     }
   }
 
-  // ── Inspector tabs ─────────────────────────────────────────────────────
+
 
   function switchInspector(tabId) {
     document.querySelectorAll('.inspector__tab').forEach(function (tab) {
@@ -46,7 +38,7 @@ var Dashboard = (function () {
     });
   }
 
-  // ── Logging ────────────────────────────────────────────────────────────
+
 
   function addLogEntry(entry) {
     var logsList = document.getElementById('logs-list');
@@ -70,14 +62,14 @@ var Dashboard = (function () {
     logsList.scrollTop = logsList.scrollHeight;
   }
 
-  // ── State updates (inspector panel) ────────────────────────────────────
+
 
   function updateInspector(state) {
-    // Connection status
+
     var connected = state.connected;
     setConnectionUI(connected);
 
-    // Session panel
+
     setText('insp-conn-status', connected ? 'connected' : 'disconnected');
     setText('insp-thread-id', state.lastThreadId || '—');
     setText('insp-blob-id', state.lastBlobId ? truncate(state.lastBlobId, 24) : '—');
@@ -86,13 +78,13 @@ var Dashboard = (function () {
     setText('insp-blobs-stored', String(state.blobsStored));
     setText('insp-tx-count', String(state.txCount));
 
-    // Metadata panel — last response
+
     var metaEl = document.getElementById('insp-last-response');
     if (metaEl && state.lastResponse) {
       metaEl.innerHTML = MemwalAPI.highlightJSON(state.lastResponse.data);
     }
 
-    // Timing panel
+
     if (state.lastResponse) {
       setText('insp-timing-total', state.lastResponse.elapsed + 'ms');
       setText('insp-timing-ts', new Date().toLocaleTimeString('en-GB', { hour12: false }));
@@ -102,7 +94,7 @@ var Dashboard = (function () {
       setText('insp-timing-endpoint', state.timingHistory[0].method + ' ' + state.timingHistory[0].endpoint);
     }
 
-    // Timing history
+
     var histEl = document.getElementById('insp-timing-history');
     if (histEl && state.timingHistory.length > 0) {
       var html = '';
@@ -120,7 +112,7 @@ var Dashboard = (function () {
   }
 
   function setConnectionUI(connected) {
-    // Header dot
+
     var statusDot = document.getElementById('status-dot');
     var statusText = document.getElementById('status-text');
     if (statusDot) {
@@ -130,7 +122,7 @@ var Dashboard = (function () {
       statusText.textContent = connected ? 'connected' : 'disconnected';
     }
 
-    // Sidebar dot
+
     var sidebarDot = document.getElementById('sidebar-status-dot');
     var sidebarText = document.getElementById('sidebar-status-text');
     if (sidebarDot) {
@@ -144,7 +136,7 @@ var Dashboard = (function () {
     }
   }
 
-  // ── Config population ──────────────────────────────────────────────────
+
 
   function populateConfig(config) {
     if (!config) return;
@@ -155,7 +147,7 @@ var Dashboard = (function () {
     setInputVal('settings-registry', config.REGISTRY_OBJECT_ID || '');
   }
 
-  // ── Helpers ────────────────────────────────────────────────────────────
+
 
   function setText(id, text) {
     var el = document.getElementById(id);
@@ -177,24 +169,24 @@ var Dashboard = (function () {
     return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
 
-  // ── Init ───────────────────────────────────────────────────────────────
+
 
   function init() {
-    // Sidebar navigation
+
     document.querySelectorAll('.sidebar__item').forEach(function (item) {
       item.addEventListener('click', function () {
         switchPanel(this.dataset.panel);
       });
     });
 
-    // Inspector tabs
+
     document.querySelectorAll('.inspector__tab').forEach(function (tab) {
       tab.addEventListener('click', function () {
         switchInspector(this.dataset.inspector);
       });
     });
 
-    // Clear logs button
+
     var clearLogsBtn = document.getElementById('clear-logs-btn');
     if (clearLogsBtn) {
       clearLogsBtn.addEventListener('click', function () {
@@ -204,19 +196,19 @@ var Dashboard = (function () {
       });
     }
 
-    // Wire up API logging
+
     MemwalAPI.onLog(addLogEntry);
 
-    // Wire up state changes
+
     MemwalAPI.onStateChange(updateInspector);
 
-    // Init sub-modules
+
     ApiTester.init();
     MemoryExplorer.init();
     FileExplorer.init();
     Templates.init();
 
-    // Health check + config
+
     MemwalAPI.log('info', 'Initialising playground...');
     MemwalAPI.healthCheck().then(function (result) {
       if (result.ok) {
@@ -234,7 +226,7 @@ var Dashboard = (function () {
       }
     });
 
-    // Keyboard shortcuts
+
     document.addEventListener('keydown', function (e) {
       if (e.ctrlKey || e.metaKey) {
         switch (e.key) {
