@@ -1,0 +1,107 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  verify:
+    name: Verify
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          fi
+          if [ -f requirements-dev.txt ]; then
+            pip install -r requirements-dev.txt
+          fi
+          if [ -f pyproject.toml ] && grep -q "pytest" pyproject.toml; then
+            pip install ".[dev]"
+          fi
+
+      - name: Python compile check
+        shell: bash
+        run: |
+          set -euo pipefail
+          files=()
+          for file in memwal/*.py agents/demo.py api/index.py playground/server.py; do
+            if [ -e "$file" ]; then
+              files+=("$file")
+            fi
+          done
+          if [ "${#files[@]}" -eq 0 ]; then
+            echo "No Python files found for compile check."
+            echo "✓ Python compile check"
+          else
+            if python -m py_compile "${files[@]}"; then
+              echo "✓ Python compile check"
+            else
+              echo "✗ Compile failed"
+              echo "CI FAILED"
+              exit 1
+            fi
+          fi
+
+      - name: Smoke test
+        shell: bash
+        run: |
+          set -euo pipefail
+          if python - <<'PY'
+          from memwal.checkpoint import WalrusCheckpointer
+          from memwal.walrus import WalrusClient
+          from memwal.sui import SuiRegistry
+
+          print("MemWal smoke test passed")
+          PY
+          then
+            echo "✓ Smoke test"
+          else
+            echo "✗ Smoke test failed"
+            echo "CI FAILED"
+            exit 1
+          fi
+
+      - name: Pytest
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ ! -d tests ]; then
+            echo "No tests directory found."
+            echo "Skipping pytest."
+            echo "✓ Pytest"
+            exit 0
+          fi
+
+          if [ "${MEMWAL_RUN_LIVE_TESTS:-0}" != "1" ]; then
+            echo "Live integration tests are present, but MEMWAL_RUN_LIVE_TESTS is not set to 1."
+            echo "Skipping pytest to avoid live Walrus/Sui network calls and writes."
+            echo "✓ Pytest"
+            exit 0
+          fi
+
+          if pytest tests/ -v; then
+            echo "✓ Pytest"
+          else
+            echo "✗ Pytest failed"
+            echo "CI FAILED"
+            exit 1
+          fi
+
+      - name: CI result
+        shell: bash
+        run: |
+          echo "CI PASSED"
