@@ -11,29 +11,42 @@ htmlcov/
 dist/
 build/
 *.egg-info/
+*.sqlite3
 
 # Virtual environments
 .venv/
 venv/
 env/
+audit-env/
 
 # Environment and secrets
 .env
 .env.*
 !.env.example
 
+# Node.js
+node_modules/
+package-lock.json
+yarn.lock
+
 # Local editor/OS files
 .DS_Store
+Thumbs.db
 .idea/
 .vscode/
 *.swp
 *.swo
+*~
 
 # Vercel local state
 .vercel/
 
 # Sui Move build output
 contracts/build/
+
+# Sui keystore / wallet (never commit private keys)
+*.keystore
+sui.keystore
 
 # Logs
 *.log
