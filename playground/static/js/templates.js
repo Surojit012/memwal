@@ -3,7 +3,7 @@ var Templates = (function () {
 
   var TEMPLATES = [
     {
-      icon: '💬',
+      icon: '/svg/chat-round-line-svgrepo-com.svg',
       title: 'Personal Assistant',
       desc: 'Store a multi-turn conversation checkpoint. Simulates a personal assistant that remembers past interactions.',
       tags: ['checkpoint', 'messages', 'context'],
@@ -22,7 +22,7 @@ var Templates = (function () {
       }
     },
     {
-      icon: '🔬',
+      icon: '/svg/research-left-svgrepo-com.svg',
       title: 'Research Agent',
       desc: 'Checkpoint a research agent that has accumulated findings across multiple queries and sources.',
       tags: ['checkpoint', 'knowledge', 'research'],
@@ -44,7 +44,7 @@ var Templates = (function () {
       }
     },
     {
-      icon: '🔗',
+      icon: '/svg/link-svgrepo-com.svg',
       title: 'Multi-Agent Workflow',
       desc: 'Register multiple threads to simulate a multi-agent system where agents share context through the on-chain registry.',
       tags: ['registry', 'multi-agent', 'coordination'],
@@ -63,7 +63,7 @@ var Templates = (function () {
       }
     },
     {
-      icon: '📖',
+      icon: '/svg/books-supplies-svgrepo-com.svg',
       title: 'RAG System',
       desc: 'Store retrieval-augmented generation context including document embeddings metadata and retrieval history.',
       tags: ['checkpoint', 'RAG', 'embeddings'],
@@ -86,7 +86,7 @@ var Templates = (function () {
       }
     },
     {
-      icon: '🧠',
+      icon: '/svg/brain-illustration-12-svgrepo-com.svg',
       title: 'Long-Term Memory',
       desc: 'Store a simple key-value blob to test Walrus blob storage and retrieval without the full checkpoint flow.',
       tags: ['blob', 'storage', 'walrus'],
@@ -116,7 +116,7 @@ var Templates = (function () {
     var html = '';
     TEMPLATES.forEach(function (tpl, idx) {
       html += '<div class="template-card" data-template-idx="' + idx + '">';
-      html += '  <div class="template-card__icon">' + tpl.icon + '</div>';
+      html += '  <div class="template-card__icon"><img src="' + tpl.icon + '" alt="" aria-hidden="true" /></div>';
       html += '  <h3 class="template-card__title">' + tpl.title + '</h3>';
       html += '  <p class="template-card__desc">' + tpl.desc + '</p>';
       html += '  <div class="template-card__tags">';

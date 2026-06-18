@@ -37,6 +37,7 @@ from memwal.walrus import WalrusClient
 PORT = int(os.environ.get("PLAYGROUND_PORT", "8420"))
 HOST = os.environ.get("PLAYGROUND_HOST", "0.0.0.0")
 STATIC_DIR = Path(__file__).resolve().parent / "static"
+SVG_DIR = Path(__file__).resolve().parent / "svg"
 
 
 try:
@@ -284,6 +285,7 @@ app.add_middleware(
 
 
 app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
+app.mount("/svg", StaticFiles(directory=str(SVG_DIR)), name="svg")
 
 
 class StoreBlobRequest(BaseModel):
