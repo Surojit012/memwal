@@ -1,14 +1,18 @@
 # 🧠 MemWal
 
+![PyPI](https://img.shields.io/pypi/v/memwal-checkpoint)
+
+![Python](https://img.shields.io/badge/Python-3.10+-blue)
+
+![LangGraph](https://img.shields.io/badge/LangGraph-Supported-green)
+
+![Sui + Walrus](https://img.shields.io/badge/Sui+Walrus-Testnet-purple)
+
 > Portable memory for AI agents.
 
 A decentralized LangGraph checkpoint backend powered by Walrus and Sui.
 
 **Kill the machine. Start another one. The agent continues.**
-
-![Python](https://img.shields.io/badge/Python-3.10+-blue)
-![LangGraph](https://img.shields.io/badge/LangGraph-Supported-green)
-![Sui + Walrus](https://img.shields.io/badge/Sui+Walrus-Testnet-purple)
 
 ## 🚀 TL;DR
 
@@ -91,6 +95,28 @@ Memory survives
 
 MemWal replaces local-only checkpoint storage with decentralized persistence while keeping the LangGraph developer experience familiar.
 
+## 30-second Quickstart
+
+Install:
+
+```bash
+pip install memwal-checkpoint
+```
+
+Use:
+
+```python
+from memwal import WalrusCheckpointer
+
+checkpointer = WalrusCheckpointer.from_env()
+
+graph = builder.compile(
+    checkpointer=checkpointer
+)
+```
+
+MemWal replaces local-only LangGraph checkpoint storage with decentralized persistence powered by Walrus and Sui.
+
 ## Architecture
 
 ```text
@@ -159,12 +185,6 @@ An agent can stop running on one machine and continue running on another by rest
 pip install memwal-checkpoint
 ```
 
-Or install directly from GitHub:
-
-```bash
-pip install git+https://github.com/Surojit012/memwal.git
-```
-
 > **Note**
 >
 > MemWal is the product name.
@@ -220,6 +240,28 @@ graph = builder.compile(
     checkpointer=checkpointer
 )
 ```
+
+## Production Verification
+
+MemWal has been verified end-to-end.
+
+✅ Live Walrus testnet writes
+
+✅ Live Sui registry transactions
+
+✅ Cross-machine recovery
+
+✅ Multi-thread isolation
+
+✅ Snapshot strategy
+
+✅ Delta strategy
+
+✅ GitHub CI
+
+✅ PyPI publish
+
+✅ Fresh install from PyPI
 
 ## Live Demo Results
 
@@ -316,11 +358,14 @@ No in-memory state was reused.
 ## Roadmap
 
 * Delta compaction
-* PyPI release
 * Monitoring dashboard
 
 ## License
 
 MIT
+
+---
+
+Built for portable AI memory.
 
 Kill the machine. Start another one. The agent continues.
