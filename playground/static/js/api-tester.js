@@ -55,6 +55,7 @@ var ApiTester = (function () {
       description: 'Create a full checkpoint (store + register)',
       params: [
         { key: 'thread_id', label: 'Thread ID', type: 'text', placeholder: 'e.g. my-agent-thread-001', defaultValue: 'playground-checkpoint-test' },
+        { key: 'strategy', label: 'Strategy', type: 'text', placeholder: 'snapshot or delta', defaultValue: 'snapshot' },
         { key: 'data', label: 'Checkpoint Data (JSON)', type: 'textarea', placeholder: '{"messages": [...], "context": {...}}', defaultValue: '{\n  "messages": [\n    {"role": "user", "content": "Hello, remember me!"},\n    {"role": "assistant", "content": "Of course! Stored on Walrus."}\n  ],\n  "metadata": {"source": "playground"}\n}' }
       ],
       execute: function (params) {
@@ -64,7 +65,7 @@ var ApiTester = (function () {
         } catch (e) {
           data = { raw: params.data };
         }
-        return MemwalAPI.putCheckpoint(params.thread_id, data);
+        return MemwalAPI.putCheckpoint(params.thread_id, data, params.strategy, true);
       }
     },
     'checkpoint-get': {
@@ -72,10 +73,50 @@ var ApiTester = (function () {
       url: '/api/checkpoint/get/{thread_id}',
       description: 'Retrieve the latest checkpoint',
       params: [
-        { key: 'thread_id', label: 'Thread ID', type: 'text', placeholder: 'e.g. my-agent-thread-001', defaultValue: 'memwal-demo-thread-001' }
+        { key: 'thread_id', label: 'Thread ID', type: 'text', placeholder: 'e.g. my-agent-thread-001', defaultValue: 'memwal-demo-thread-001' },
+        { key: 'strategy', label: 'Strategy', type: 'text', placeholder: 'snapshot or delta', defaultValue: 'snapshot' }
       ],
       execute: function (params) {
-        return MemwalAPI.getCheckpoint(params.thread_id);
+        return MemwalAPI.getCheckpoint(params.thread_id, params.strategy);
+      }
+    },
+    'proof-basic': {
+      method: 'POST',
+      url: '/api/proof/basic',
+      description: 'Run the basic store + restore proof using WalrusCheckpointer',
+      params: [],
+      execute: function () {
+        return MemwalAPI.runBasicProof();
+      }
+    },
+    'proof-benchmark': {
+      method: 'POST',
+      url: '/api/proof/benchmark',
+      description: 'Run snapshot/delta benchmark proof with live Walrus + Sui writes',
+      params: [
+        { key: 'steps', label: 'Steps', type: 'number', placeholder: '5 or 20', defaultValue: '5' },
+        { key: 'strategy', label: 'Strategy', type: 'text', placeholder: 'both, snapshot, or delta', defaultValue: 'both' }
+      ],
+      execute: function (params) {
+        return MemwalAPI.runBenchmarkProof(params.steps, params.strategy);
+      }
+    },
+    'proof-cross-machine': {
+      method: 'POST',
+      url: '/api/proof/cross-machine',
+      description: 'Prove memory survives across fresh checkpointer instances',
+      params: [],
+      execute: function () {
+        return MemwalAPI.runCrossMachineProof();
+      }
+    },
+    'proof-isolation': {
+      method: 'POST',
+      url: '/api/proof/isolation',
+      description: 'Prove multiple independent threads restore without contamination',
+      params: [],
+      execute: function () {
+        return MemwalAPI.runIsolationProof();
       }
     }
   };

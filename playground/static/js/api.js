@@ -161,8 +161,13 @@ var MemwalAPI = (function () {
       });
   }
 
-  function putCheckpoint(threadId, data) {
-    return request('POST', '/api/checkpoint/put', { thread_id: threadId, data: data })
+  function putCheckpoint(threadId, data, strategy, forceSnapshot) {
+    return request('POST', '/api/checkpoint/put', {
+      thread_id: threadId,
+      data: data,
+      strategy: strategy || 'snapshot',
+      force_snapshot: forceSnapshot !== false
+    })
       .then(function (result) {
         if (result.ok) {
           state.lastThreadId = threadId;
@@ -175,13 +180,69 @@ var MemwalAPI = (function () {
       });
   }
 
-  function getCheckpoint(threadId) {
-    return request('GET', '/api/checkpoint/get/' + encodeURIComponent(threadId))
+  function getCheckpoint(threadId, strategy) {
+    var suffix = strategy ? '?strategy=' + encodeURIComponent(strategy) : '';
+    return request('GET', '/api/checkpoint/get/' + encodeURIComponent(threadId) + suffix)
       .then(function (result) {
         if (result.ok) {
           state.lastThreadId = threadId;
           if (result.data.checkpoint_id) state.lastCheckpointId = result.data.checkpoint_id;
           if (result.data.blob_id) state.lastBlobId = result.data.blob_id;
+          notifyState();
+        }
+        return result;
+      });
+  }
+
+  function runBasicProof() {
+    return request('POST', '/api/proof/basic')
+      .then(function (result) {
+        if (result.ok) {
+          if (result.data.thread_id) state.lastThreadId = result.data.thread_id;
+          if (result.data.blob_id) state.lastBlobId = result.data.blob_id;
+          if (result.data.tx_digest) state.txCount++;
+          notifyState();
+        }
+        return result;
+      });
+  }
+
+  function runBenchmarkProof(steps, strategy) {
+    return request('POST', '/api/proof/benchmark', {
+      steps: parseInt(steps, 10) || 5,
+      strategy: strategy || 'both'
+    }).then(function (result) {
+      if (result.ok && result.data.results && result.data.results.length) {
+        var last = result.data.results[result.data.results.length - 1];
+        if (last.thread_id) state.lastThreadId = last.thread_id;
+        if (last.blob_ids && last.blob_ids.length) state.lastBlobId = last.blob_ids[last.blob_ids.length - 1];
+        if (last.tx_digests) state.txCount += last.tx_digests.length;
+        notifyState();
+      }
+      return result;
+    });
+  }
+
+  function runCrossMachineProof() {
+    return request('POST', '/api/proof/cross-machine')
+      .then(function (result) {
+        if (result.ok) {
+          if (result.data.thread_id) state.lastThreadId = result.data.thread_id;
+          if (result.data.blob_id) state.lastBlobId = result.data.blob_id;
+          if (result.data.tx_digest) state.txCount++;
+          notifyState();
+        }
+        return result;
+      });
+  }
+
+  function runIsolationProof() {
+    return request('POST', '/api/proof/isolation')
+      .then(function (result) {
+        if (result.ok) {
+          if (result.data.threads && result.data.threads.C) state.lastThreadId = result.data.threads.C.thread_id;
+          if (result.data.blob_ids && result.data.blob_ids.length) state.lastBlobId = result.data.blob_ids[result.data.blob_ids.length - 1];
+          if (result.data.tx_digests) state.txCount += result.data.tx_digests.length;
           notifyState();
         }
         return result;
@@ -245,6 +306,10 @@ var MemwalAPI = (function () {
     lookupThread: lookupThread,
     putCheckpoint: putCheckpoint,
     getCheckpoint: getCheckpoint,
+    runBasicProof: runBasicProof,
+    runBenchmarkProof: runBenchmarkProof,
+    runCrossMachineProof: runCrossMachineProof,
+    runIsolationProof: runIsolationProof,
     uploadFile: uploadFile,
     highlightJSON: highlightJSON,
     onLog: onLog,

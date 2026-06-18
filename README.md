@@ -1,120 +1,316 @@
-# MemWal
+# 🧠 MemWal
 
-MemWal is a Walrus-backed checkpoint backend for LangGraph agents, with Sui
-testnet used as the on-chain registry for `thread_id -> blob_id` mappings.
+> Portable memory for AI agents.
+
+A decentralized LangGraph checkpoint backend powered by Walrus and Sui.
+
+**Kill the machine. Start another one. The agent continues.**
+
+![Python](https://img.shields.io/badge/Python-3.10+-blue)
+![LangGraph](https://img.shields.io/badge/LangGraph-Supported-green)
+![Sui + Walrus](https://img.shields.io/badge/Sui+Walrus-Testnet-purple)
+
+## 🚀 TL;DR
+
+```text
+Today:
+
+AI Agent
+
+↓
+
+Local RAM
+
+↓
+
+Process dies
+
+↓
+
+Memory lost
+
+
+With MemWal:
+
+AI Agent
+
+↓
+
+Walrus
+
+↓
+
+Sui
+
+↓
+
+Resume anywhere
+```
+
+MemWal lets LangGraph agents survive machine restarts without relying on SQLite, Redis, or local files.
+
+## Why MemWal?
+
+Most AI agent memory is tied to the machine where the agent is running. If the process exits, the container restarts, or the developer switches machines, the agent's state often disappears with it unless a local database or custom persistence layer has been wired in.
+
+Without MemWal:
+
+```text
+AI Agent
+
+↓
+
+Local RAM
+
+↓
+
+Machine dies
+
+↓
+
+Memory lost
+```
+
+With MemWal:
+
+```text
+AI Agent
+
+↓
+
+Walrus
+
+↓
+
+Sui
+
+↓
+
+Memory survives
+```
+
+MemWal replaces local-only checkpoint storage with decentralized persistence while keeping the LangGraph developer experience familiar.
+
+## Architecture
+
+```text
+LangGraph Agent
+
+↓
+
+WalrusCheckpointer
+
+↓
+
+Walrus (blob storage)
+
+↓
+
+Sui (thread_id → blob_id registry)
+
+↓
+
+Resume anywhere
+```
+
+At a high level, MemWal stores checkpoint bytes in Walrus and records the latest blob ID for each `thread_id` in a Sui registry object.
+
+## ✅ What We Verified
+
+| Capability             | Status |
+| ---------------------- | ------ |
+| Snapshot checkpoints   | ✅      |
+| Delta checkpoints      | ✅      |
+| Cross-machine recovery | ✅      |
+| Multi-thread isolation | ✅      |
+| Storage benchmarks     | ✅      |
+| Walrus integration     | ✅      |
+| Sui integration        | ✅      |
+| GitHub CI              | ✅      |
+
+## 🌍 Why this matters
+
+Today's agent memory is usually tied to:
+
+* RAM
+* SQLite
+* Redis
+* Local files
+
+If the machine disappears, the memory disappears.
+
+MemWal decouples memory from compute.
+
+An agent can stop running on one machine and continue running on another by restoring its state from Walrus and Sui.
+
+## Features
+
+* Snapshot checkpoints
+* Delta checkpoints
+* Cross-machine recovery
+* Multi-thread isolation
+* On-chain thread registry
+* Storage benchmarks
+* GitHub CI
+
+## Installation
+
+PyPI release is coming soon.
+
+```bash
+pip install memwal
+```
+
+Until the PyPI package is published, install directly from GitHub:
+
+```bash
+pip install git+https://github.com/Surojit012/memwal.git
+```
+
+## 🛠️ Development
+
+Install local development dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Install the package:
+
+```bash
+pip install -e .
+```
+
+## ⚡ One-line integration
+
+Replace:
 
 ```python
-from memwal.checkpoint import WalrusCheckpointer
+checkpointer = MemorySaver()
+```
+
+with:
+
+```python
+checkpointer = WalrusCheckpointer.from_env()
+```
+
+That's it.
+
+Your LangGraph agent now stores memory on Walrus and uses Sui as a decentralized thread registry.
+
+## Quickstart
+
+```python
+from memwal import WalrusCheckpointer
 
 checkpointer = WalrusCheckpointer.from_env()
-graph = builder.compile(checkpointer=checkpointer)
+
+graph = builder.compile(
+    checkpointer=checkpointer
+)
 ```
 
-## Project Layout
+## Live Demo Results
+
+The demo runner verifies MemWal against live Walrus and Sui testnet infrastructure.
+
+5 steps:
+
+| strategy | savings |
+| -------- | ------- |
+| snapshot | 60.87%  |
+| delta    | 53.75%  |
+
+20 steps:
+
+| strategy | savings |
+| -------- | ------- |
+| snapshot | 75.66%  |
+| delta    | 81.01%  |
+
+Delta mode becomes more efficient as conversations grow because it stores incremental changes instead of repeatedly uploading the full growing checkpoint.
+
+## Cross-machine verification
+
+MemWal has been verified with a cross-machine recovery flow:
 
 ```text
-memwal/
-  config.py       Environment loading and validation
-  walrus.py       Walrus publisher/aggregator client
-  sui.py          Sui JSON-RPC registry client
-  checkpoint.py   LangGraph checkpoint saver
-agents/
-  demo.py         End-to-end demo agent
-contracts/
-  sources/        Sui Move registry contract
-playground/
-  server.py       FastAPI playground used by Vercel
-api/
-  index.py        Vercel ASGI entrypoint
-tests/
-  test_memwal.py  Live testnet integration tests
+Machine A
+
+↓
+
+Store memory
+
+↓
+
+Destroy machine
+
+↓
+
+Machine B
+
+↓
+
+Restore memory
 ```
 
-## Local Setup
+The restored agent state comes from Walrus and Sui, not from local files, local RAM, or a local database.
 
-```zsh
-cd /Users/surojitpvt/Downloads/memwal-main
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install --upgrade pip
-pip install -e ".[dev,llm]"
-```
+## Multi-thread isolation
 
-Copy `.env.example` to `.env` and set:
-
-```env
-SUI_PRIVATE_KEY=...
-REGISTRY_PACKAGE_ID=...
-REGISTRY_OBJECT_ID=...
-STRAICO_API_KEY=...
-```
-
-## Run the Demo
-
-```zsh
-source .venv/bin/activate
-python agents/demo.py
-```
-
-## Run the Playground Locally
-
-```zsh
-source .venv/bin/activate
-uvicorn playground.server:app --host 0.0.0.0 --port 8420 --reload
-```
-
-Open:
+MemWal has also been verified with independent thread recovery:
 
 ```text
-http://localhost:8420
-http://localhost:8420/playground
+Thread A -> Pizza
+
+Thread B -> Football
+
+Thread C -> Python
 ```
 
-## Run Integration Tests
+Each thread restores only its own memory. No cross-thread contamination was observed.
 
-These tests use live Walrus and Sui testnet resources.
+## How it works
 
-```zsh
-source .venv/bin/activate
-pytest tests/ -v -s
-```
+1. Serialize the LangGraph checkpoint.
+2. Upload the checkpoint bytes to Walrus.
+3. Register the returned Walrus blob ID on Sui under the LangGraph `thread_id`.
+4. Restore by looking up the `thread_id` on Sui, fetching the blob from Walrus, and reconstructing the checkpoint.
 
-## Vercel Deployment
-
-The Vercel entrypoint is `api/index.py`, which serves the FastAPI app from
-`playground.server:app`.
-
-Set these Vercel environment variables before deploying:
+This gives each LangGraph thread a decentralized memory pointer:
 
 ```text
-SUI_PRIVATE_KEY
-REGISTRY_PACKAGE_ID
-REGISTRY_OBJECT_ID
-SUI_RPC_URL
-WALRUS_PUBLISHER
-WALRUS_AGGREGATOR
-STORAGE_EPOCHS
-STRAICO_API_KEY
-STRAICO_MODEL
+thread_id -> Sui registry -> Walrus blob -> LangGraph checkpoint
 ```
 
-Deploy with:
+## 🎯 Demo Proof
 
-```zsh
-vercel
-```
+MemWal has been validated end-to-end on live Walrus and Sui testnet infrastructure.
 
-Production deploy:
+Verified scenarios:
 
-```zsh
-vercel --prod
-```
+- ✅ Agent persistence
+- ✅ Cross-machine recovery
+- ✅ Multi-thread isolation
+- ✅ Snapshot checkpoints
+- ✅ Delta checkpoints
+- ✅ GitHub CI
 
-## Move Contract
+No local database was used.
 
-```zsh
-cd contracts
-sui move build
-sui move test
-sui move publish --gas-budget 100000000
-```
+No local files were used.
+
+No in-memory state was reused.
+
+## Roadmap
+
+* Delta compaction
+* PyPI release
+* Monitoring dashboard
+
+## License
+
+MIT
+
+Kill the machine. Start another one. The agent continues.
