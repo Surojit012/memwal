@@ -3,8 +3,8 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "memwal"
-version = "0.1.0"
+name = "memwal-checkpoint"
+version = "0.1.1"
 description = "Portable memory for AI agents using Walrus and Sui."
 readme = "README.md"
 requires-python = ">=3.10"

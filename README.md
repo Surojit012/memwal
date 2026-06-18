@@ -155,17 +155,27 @@ An agent can stop running on one machine and continue running on another by rest
 
 ## Installation
 
-PyPI release is coming soon.
-
 ```bash
-pip install memwal
+pip install memwal-checkpoint
 ```
 
-Until the PyPI package is published, install directly from GitHub:
+Or install directly from GitHub:
 
 ```bash
 pip install git+https://github.com/Surojit012/memwal.git
 ```
+
+> **Note**
+>
+> MemWal is the product name.
+>
+> `memwal-checkpoint` is the Python package distribution name.
+>
+> Imports remain:
+>
+> ```python
+> from memwal import WalrusCheckpointer
+> ```
 
 ## 🛠️ Development
 
