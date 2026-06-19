@@ -1,21 +1,17 @@
 {
   "version": 2,
+  "framework": null,
+  "installCommand": "",
+  "buildCommand": "sh vercel-build.sh",
+  "outputDirectory": "public",
   "rewrites": [
     {
       "source": "/",
-      "destination": "/playground/static/index.html"
+      "destination": "/index.html"
     },
     {
       "source": "/playground",
-      "destination": "/playground/static/playground.html"
-    },
-    {
-      "source": "/static/:path*",
-      "destination": "/playground/static/:path*"
-    },
-    {
-      "source": "/svg/:path*",
-      "destination": "/playground/svg/:path*"
+      "destination": "/playground.html"
     }
   ],
   "headers": [
