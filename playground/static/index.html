@@ -44,6 +44,12 @@
     </header>
 
     <section class="hero" id="hero">
+      <div class="hero__layer hero__layer--base" aria-hidden="true">
+        <img src="/static/img/hero-layer1.png" alt="" draggable="false" />
+      </div>
+      <div class="hero__layer hero__layer--reveal" id="hero-reveal-layer" aria-hidden="true">
+        <img src="/static/img/hero-layer2.png" alt="" draggable="false" />
+      </div>
       <div class="hero__grid" aria-hidden="true"></div>
       <div class="hero__glow" aria-hidden="true"></div>
       <canvas class="hero__webgl" id="hero-webgl-text" aria-hidden="true"></canvas>
@@ -83,40 +89,7 @@
             <span class="hero__tech-badge">msgpack</span>
           </div>
         </div>
-
-        <div class="hero__artifact" aria-hidden="true">
-          <div class="hero__palette">
-            <span class="hero__swatch hero__swatch--cafe"></span>
-            <span class="hero__swatch hero__swatch--kombu"></span>
-            <span class="hero__swatch hero__swatch--moss"></span>
-            <span class="hero__swatch hero__swatch--tan"></span>
-            <span class="hero__swatch hero__swatch--bone"></span>
-          </div>
-
-          <div class="memory-stack">
-            <div class="memory-stack__row memory-stack__row--agent">
-              <span>agent</span>
-              <strong>LangGraph</strong>
-            </div>
-            <div class="memory-stack__row memory-stack__row--checkpoint">
-              <span>checkpoint</span>
-              <strong>msgpack state</strong>
-            </div>
-            <div class="memory-stack__row memory-stack__row--walrus">
-              <span>blob</span>
-              <strong>Walrus storage</strong>
-            </div>
-            <div class="memory-stack__row memory-stack__row--sui">
-              <span>registry</span>
-              <strong>Sui thread map</strong>
-            </div>
-          </div>
-
-          <div class="hero__proof-card">
-            <span>thread_id</span>
-            <strong>agent-001 → blob_id</strong>
-          </div>
-        </div>
+        <div class="hero__rubiks" id="rubiks-container" aria-hidden="true"></div>
       </div>
     </section>
 
@@ -588,7 +561,9 @@ result <span class="op">=</span> graph<span class="op">.</span><span class="fn">
   <div class="page-transition" id="page-transition" aria-hidden="true"></div>
 
   <script async src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="/static/js/landing.js"></script>
+  <script src="/static/js/rubiks.js"></script>
 </body>
 
 </html>

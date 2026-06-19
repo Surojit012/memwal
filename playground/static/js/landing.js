@@ -2,11 +2,11 @@
   'use strict';
 
   var palette = {
-    cafeNoir: [76 / 255, 61 / 255, 25 / 255],
-    kombu: [53 / 255, 64 / 255, 36 / 255],
-    moss: [136 / 255, 144 / 255, 99 / 255],
-    tan: [207 / 255, 187 / 255, 153 / 255],
-    bone: [229 / 255, 215 / 255, 196 / 255]
+    cafeNoir: [5 / 255, 38 / 255, 89 / 255],
+    kombu: [14 / 255, 61 / 255, 122 / 255],
+    moss: [84 / 255, 131 / 255, 179 / 255],
+    tan: [125 / 255, 160 / 255, 202 / 255],
+    bone: [193 / 255, 232 / 255, 255 / 255]
   };
 
   function hasGsap() {
@@ -156,7 +156,7 @@
             : 'var(--border-subtle)';
           header.style.background = scrolled
             ? 'var(--bg-overlay)'
-            : 'rgba(11, 13, 8, 0.72)';
+            : 'rgba(2, 16, 36, 0.72)';
         }
       },
       { passive: true }
@@ -448,5 +448,62 @@
     initSmoothAnchors();
     initWorkflowAnimation();
     initWebglHeroText();
+    initHeroReveal();
   });
+
+  function initHeroReveal() {
+    var hero = document.getElementById('hero');
+    var revealLayer = document.getElementById('hero-reveal-layer');
+    if (!hero || !revealLayer) return;
+
+    var RADIUS = 400;
+    var currentX = -9999;
+    var currentY = -9999;
+    var targetX = -9999;
+    var targetY = -9999;
+    var isHovering = false;
+    var rafId = null;
+
+    function updateMask() {
+      currentX += (targetX - currentX) * 0.12;
+      currentY += (targetY - currentY) * 0.12;
+
+      var mask =
+        'radial-gradient(circle ' + RADIUS + 'px at ' +
+        currentX + 'px ' + currentY + 'px, ' +
+        'rgba(0, 0, 0, 0.25) 0%, transparent 60%)';
+
+      revealLayer.style.webkitMaskImage = mask;
+      revealLayer.style.maskImage = mask;
+
+      if (isHovering || Math.abs(targetX - currentX) > 0.5 || Math.abs(targetY - currentY) > 0.5) {
+        rafId = requestAnimationFrame(updateMask);
+      } else {
+        rafId = null;
+      }
+    }
+
+    hero.addEventListener('mousemove', function (e) {
+      var rect = hero.getBoundingClientRect();
+      targetX = e.clientX - rect.left;
+      targetY = e.clientY - rect.top;
+
+      if (!isHovering) {
+        isHovering = true;
+        currentX = targetX;
+        currentY = targetY;
+      }
+
+      if (!rafId) {
+        rafId = requestAnimationFrame(updateMask);
+      }
+    });
+
+    hero.addEventListener('mouseleave', function () {
+      isHovering = false;
+      revealLayer.style.webkitMaskImage = 'radial-gradient(circle 0px at 50% 50%, black 0%, transparent 0%)';
+      revealLayer.style.maskImage = 'radial-gradient(circle 0px at 50% 50%, black 0%, transparent 0%)';
+    });
+  }
+
 })();

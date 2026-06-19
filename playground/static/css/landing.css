@@ -95,6 +95,43 @@
   background: var(--bg-root);
 }
 
+.hero__layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+.hero__layer img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.hero__layer--base {
+  z-index: 0;
+  opacity: 0.6;
+}
+
+.hero__layer--reveal {
+  z-index: 1;
+  opacity: 0.9;
+  -webkit-mask-image: radial-gradient(
+    circle 0px at 50% 50%,
+    black 0%,
+    transparent 0%
+  );
+  mask-image: radial-gradient(
+    circle 0px at 50% 50%,
+    black 0%,
+    transparent 0%
+  );
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  transition: opacity 0.3s ease;
+}
+
 .hero__grid {
   position: absolute;
   inset: 0;
@@ -205,6 +242,17 @@
   transform: translateY(-1px);
   box-shadow: 0 4px 16px rgba(125, 160, 202, 0.18);
   color: var(--text-inverse);
+}
+
+.hero__rubiks {
+  width: 100%;
+  max-width: 440px;
+  aspect-ratio: 1;
+  position: relative;
+  border-radius: var(--radius-xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .hero__cta-secondary {
