@@ -14,7 +14,7 @@
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=JetBrains+Mono:wght@100..900&display=swap" />
 
-  
+
   <link rel="stylesheet" href="/static/css/tokens.css" />
   <link rel="stylesheet" href="/static/css/base.css" />
   <link rel="stylesheet" href="/static/css/dashboard.css" />
@@ -23,9 +23,9 @@
 <body>
   <div class="dashboard">
 
-    
-    
-    
+
+
+
     <header class="dash-header" id="dash-header">
       <a href="/" class="dash-header__brand">
         <img src="/static/img/logo.png" alt="MemWal Logo" class="landing-header__logo" />
@@ -43,9 +43,9 @@
       </div>
     </header>
 
-    
-    
-    
+
+
+
     <nav class="sidebar" id="sidebar" aria-label="playground navigation">
       <div class="sidebar__section">
         <div class="sidebar__section-label">tools</div>
@@ -128,13 +128,13 @@
       </div>
     </nav>
 
-    
-    
-    
+
+
+
     <main class="workspace" id="workspace">
       <div class="workspace__content">
 
-        
+
         <div class="panel is-active" id="panel-playground">
           <div class="panel__header">
             <div>
@@ -144,7 +144,7 @@
           </div>
 
           <div class="api-tester" id="api-tester-main">
-            
+
             <div class="api-tester__selector" id="endpoint-selector">
               <button class="api-tester__selector-btn is-active" data-endpoint="store-blob">Store Blob</button>
               <button class="api-tester__selector-btn" data-endpoint="fetch-blob">Fetch Blob</button>
@@ -158,7 +158,7 @@
               <button class="api-tester__selector-btn" data-endpoint="proof-isolation">Proof: Isolation</button>
             </div>
 
-            
+
             <div class="api-tester__endpoint-bar">
               <div class="api-tester__method api-tester__method--post" id="endpoint-method">POST</div>
               <div class="api-tester__url" id="endpoint-url">/api/blob/store</div>
@@ -168,7 +168,7 @@
               </button>
             </div>
 
-            
+
             <div class="api-tester__params" id="params-form">
               <div class="api-tester__param-group">
                 <label class="api-tester__param-label" for="param-data">Data (text)</label>
@@ -181,7 +181,7 @@
               </div>
             </div>
 
-            
+
             <div class="api-tester__response" id="response-viewer">
               <div class="api-tester__response-header">
                 <span class="api-tester__response-title">Response</span>
@@ -197,7 +197,7 @@
           </div>
         </div>
 
-        
+
         <div class="panel" id="panel-memory">
           <div class="panel__header">
             <div>
@@ -228,7 +228,7 @@
           </div>
         </div>
 
-        
+
         <div class="panel" id="panel-files">
           <div class="panel__header">
             <div>
@@ -257,7 +257,7 @@
           </div>
         </div>
 
-        
+
         <div class="panel" id="panel-api">
           <div class="panel__header">
             <div>
@@ -350,9 +350,11 @@
               <div class="card" style="padding: var(--sp-5);">
                 <div style="display: flex; align-items: center; gap: var(--sp-3); margin-bottom: var(--sp-3);">
                   <span class="badge badge--warning" style="font-family: var(--font-mono);">POST</span>
-                  <code style="background: none; border: none; padding: 0; color: var(--text-primary);">/api/proof/basic</code>
+                  <code
+                    style="background: none; border: none; padding: 0; color: var(--text-primary);">/api/proof/basic</code>
                 </div>
-                <p class="text-sm text-tertiary" style="margin-bottom: var(--sp-3);">Runs a real WalrusCheckpointer store/restore proof with fresh thread state.</p>
+                <p class="text-sm text-tertiary" style="margin-bottom: var(--sp-3);">Runs a real WalrusCheckpointer
+                  store/restore proof with fresh thread state.</p>
                 <div style="font-family: var(--font-mono); font-size: var(--text-xs); color: var(--text-muted);">
                   Returns: <span class="text-secondary">thread_id, blob_id, tx_digest, restored_text, checks</span>
                 </div>
@@ -361,9 +363,11 @@
               <div class="card" style="padding: var(--sp-5);">
                 <div style="display: flex; align-items: center; gap: var(--sp-3); margin-bottom: var(--sp-3);">
                   <span class="badge badge--warning" style="font-family: var(--font-mono);">POST</span>
-                  <code style="background: none; border: none; padding: 0; color: var(--text-primary);">/api/proof/benchmark</code>
+                  <code
+                    style="background: none; border: none; padding: 0; color: var(--text-primary);">/api/proof/benchmark</code>
                 </div>
-                <p class="text-sm text-tertiary" style="margin-bottom: var(--sp-3);">Runs live snapshot/delta benchmark writes and verifies reconstructed chain integrity.</p>
+                <p class="text-sm text-tertiary" style="margin-bottom: var(--sp-3);">Runs live snapshot/delta benchmark
+                  writes and verifies reconstructed chain integrity.</p>
                 <div style="font-family: var(--font-mono); font-size: var(--text-xs); color: var(--text-muted);">
                   Body: <span class="text-secondary">{ "steps": 5, "strategy": "both" }</span>
                 </div>
@@ -372,22 +376,29 @@
               <div class="card" style="padding: var(--sp-5);">
                 <div style="display: flex; align-items: center; gap: var(--sp-3); margin-bottom: var(--sp-3);">
                   <span class="badge badge--warning" style="font-family: var(--font-mono);">POST</span>
-                  <code style="background: none; border: none; padding: 0; color: var(--text-primary);">/api/proof/cross-machine</code>
+                  <code
+                    style="background: none; border: none; padding: 0; color: var(--text-primary);">/api/proof/cross-machine</code>
                 </div>
-                <p class="text-sm text-tertiary" style="margin-bottom: var(--sp-3);">Stores memory with one checkpointer, destroys local references, then restores with a fresh checkpointer by thread_id only.</p>
+                <p class="text-sm text-tertiary" style="margin-bottom: var(--sp-3);">Stores memory with one
+                  checkpointer, destroys local references, then restores with a fresh checkpointer by thread_id only.
+                </p>
                 <div style="font-family: var(--font-mono); font-size: var(--text-xs); color: var(--text-muted);">
-                  Returns: <span class="text-secondary">PASS/FAIL checks for Surojit, Assam, Python, and restored history</span>
+                  Returns: <span class="text-secondary">PASS/FAIL checks for Surojit, Assam, Python, and restored
+                    history</span>
                 </div>
               </div>
 
               <div class="card" style="padding: var(--sp-5);">
                 <div style="display: flex; align-items: center; gap: var(--sp-3); margin-bottom: var(--sp-3);">
                   <span class="badge badge--warning" style="font-family: var(--font-mono);">POST</span>
-                  <code style="background: none; border: none; padding: 0; color: var(--text-primary);">/api/proof/isolation</code>
+                  <code
+                    style="background: none; border: none; padding: 0; color: var(--text-primary);">/api/proof/isolation</code>
                 </div>
-                <p class="text-sm text-tertiary" style="margin-bottom: var(--sp-3);">Creates three independent threads and verifies that pizza, football, and Python memories do not contaminate each other.</p>
+                <p class="text-sm text-tertiary" style="margin-bottom: var(--sp-3);">Creates three independent threads
+                  and verifies that pizza, football, and Python memories do not contaminate each other.</p>
                 <div style="font-family: var(--font-mono); font-size: var(--text-xs); color: var(--text-muted);">
-                  Returns: <span class="text-secondary">thread IDs, contamination checks, blob IDs, and tx digests</span>
+                  Returns: <span class="text-secondary">thread IDs, contamination checks, blob IDs, and tx
+                    digests</span>
                 </div>
               </div>
 
@@ -395,7 +406,7 @@
           </div>
         </div>
 
-        
+
         <div class="panel" id="panel-examples">
           <div class="panel__header">
             <div>
@@ -407,7 +418,7 @@
           <div class="templates-grid" id="templates-grid"></div>
         </div>
 
-        
+
         <div class="panel" id="panel-logs">
           <div class="panel__header">
             <div>
@@ -428,7 +439,7 @@
           </div>
         </div>
 
-        
+
         <div class="panel" id="panel-settings">
           <div class="panel__header">
             <div>
@@ -484,9 +495,9 @@
       </div>
     </main>
 
-    
-    
-    
+
+
+
     <aside class="inspector" id="inspector">
       <div class="inspector__tabs">
         <button class="inspector__tab is-active" data-inspector="session">Session</button>
@@ -495,7 +506,7 @@
       </div>
 
       <div class="inspector__content">
-        
+
         <div class="inspector__panel is-active" id="inspector-session">
           <div class="inspector__section">
             <h4 class="inspector__section-title">Connection</h4>
@@ -542,7 +553,7 @@
           </div>
         </div>
 
-        
+
         <div class="inspector__panel" id="inspector-meta">
           <div class="inspector__section">
             <h4 class="inspector__section-title">Last Response</h4>
@@ -552,7 +563,7 @@
           </div>
         </div>
 
-        
+
         <div class="inspector__panel" id="inspector-timing">
           <div class="inspector__section">
             <h4 class="inspector__section-title">Request Timing</h4>
@@ -583,7 +594,7 @@
 
   </div>
 
-  
+
   <script src="/static/js/api.js"></script>
   <script src="/static/js/api-tester.js"></script>
   <script src="/static/js/memory-explorer.js"></script>

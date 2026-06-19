@@ -458,8 +458,9 @@
     var hero = document.getElementById('hero');
     
     var width, height;
-    var SPACING = 60;
-    var CONNECTION_RADIUS = SPACING * 2.5; // Connect to ~5x5 neighborhood
+    var SPACING = 100;
+    var CONNECTION_RADIUS = SPACING * 2.2; 
+    var REVEAL_RADIUS = 350;
     
     var mouseX = -999;
     var mouseY = -999;
@@ -494,24 +495,8 @@
       var cols = Math.ceil(width / SPACING) + 1;
       var rows = Math.ceil(height / SPACING) + 1;
 
-      // Draw grid points
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
-      for (var i = 0; i < cols; i++) {
-        for (var j = 0; j < rows; j++) {
-          var x = i * SPACING;
-          var y = j * SPACING;
-          
-          ctx.beginPath();
-          ctx.arc(x, y, 1.5, 0, Math.PI * 2);
-          ctx.fill();
-        }
-      }
-
-      // Draw connections and mouse node
       if (isHovering && currentMouseX !== -999) {
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
-        ctx.lineWidth = 1.5;
-        
+        // Draw grid points and connections only around the mouse
         for (var i = 0; i < cols; i++) {
           for (var j = 0; j < rows; j++) {
             var x = i * SPACING;
@@ -521,9 +506,20 @@
             var dy = y - currentMouseY;
             var dist = Math.sqrt(dx * dx + dy * dy);
             
+            // Draw dot if within reveal radius
+            if (dist < REVEAL_RADIUS) {
+              var dotOpacity = Math.max(0, 1 - (dist / REVEAL_RADIUS)) * 0.8;
+              ctx.fillStyle = 'rgba(255, 255, 255, ' + dotOpacity + ')';
+              ctx.beginPath();
+              ctx.arc(x, y, 2.5, 0, Math.PI * 2);
+              ctx.fill();
+            }
+
+            // Draw connection line if closer
             if (dist < CONNECTION_RADIUS) {
-              var opacity = 1 - (dist / CONNECTION_RADIUS);
-              ctx.strokeStyle = 'rgba(255, 255, 255, ' + (opacity * 0.6) + ')';
+              var lineOpacity = Math.max(0, 1 - (dist / CONNECTION_RADIUS)) * 0.6;
+              ctx.strokeStyle = 'rgba(255, 255, 255, ' + lineOpacity + ')';
+              ctx.lineWidth = 1.5;
               ctx.beginPath();
               ctx.moveTo(currentMouseX, currentMouseY);
               ctx.lineTo(x, y);
@@ -535,16 +531,16 @@
         // Draw the main mouse node
         ctx.fillStyle = '#ffffff';
         ctx.beginPath();
-        ctx.arc(currentMouseX, currentMouseY, 5, 0, Math.PI * 2);
+        ctx.arc(currentMouseX, currentMouseY, 6, 0, Math.PI * 2);
         ctx.fill();
         
         // Inner glow for mouse node
-        var grd = ctx.createRadialGradient(currentMouseX, currentMouseY, 0, currentMouseX, currentMouseY, 15);
-        grd.addColorStop(0, 'rgba(255, 255, 255, 0.4)');
+        var grd = ctx.createRadialGradient(currentMouseX, currentMouseY, 0, currentMouseX, currentMouseY, 20);
+        grd.addColorStop(0, 'rgba(255, 255, 255, 0.5)');
         grd.addColorStop(1, 'rgba(255, 255, 255, 0)');
         ctx.fillStyle = grd;
         ctx.beginPath();
-        ctx.arc(currentMouseX, currentMouseY, 15, 0, Math.PI * 2);
+        ctx.arc(currentMouseX, currentMouseY, 20, 0, Math.PI * 2);
         ctx.fill();
       }
 
