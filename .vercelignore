@@ -11,6 +11,7 @@ playground/server.py
 playground/__init__.py
 requirements.txt
 pyproject.toml
+runtime.txt
 .pytest_cache/
 .venv/
 __pycache__/
