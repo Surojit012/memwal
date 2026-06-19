@@ -1,7 +1,46 @@
 var MemwalAPI = (function () {
   'use strict';
 
-  var BASE_URL = '';
+  var DEFAULT_REMOTE_BASE_URL = 'https://memwal.onrender.com';
+
+  function normalizeBaseUrl(value) {
+    if (!value) return '';
+    return String(value).replace(/\/+$/, '');
+  }
+
+  function queryBaseUrl() {
+    try {
+      var params = new URLSearchParams(window.location.search);
+      return params.get('api_base') || params.get('apiBase');
+    } catch (err) {
+      return '';
+    }
+  }
+
+  function storedBaseUrl() {
+    try {
+      return window.localStorage.getItem('memwalApiBaseUrl');
+    } catch (err) {
+      return '';
+    }
+  }
+
+  function inferBaseUrl() {
+    var explicit = window.MEMWAL_API_BASE_URL || queryBaseUrl() || storedBaseUrl();
+    if (explicit) return normalizeBaseUrl(explicit);
+
+    var hostname = window.location.hostname;
+    var isLocal =
+      hostname === 'localhost' ||
+      hostname === '127.0.0.1' ||
+      hostname === '0.0.0.0';
+    var isRender = hostname === 'memwal.onrender.com';
+
+    if (isLocal || isRender) return '';
+    return DEFAULT_REMOTE_BASE_URL;
+  }
+
+  var BASE_URL = inferBaseUrl();
   var state = {
     connected: false,
     requestCount: 0,
@@ -12,7 +51,8 @@ var MemwalAPI = (function () {
     lastCheckpointId: null,
     lastResponse: null,
     timingHistory: [],
-    config: null
+    config: null,
+    apiBaseUrl: BASE_URL || window.location.origin
   };
 
   var logListeners = [];
@@ -298,6 +338,8 @@ var MemwalAPI = (function () {
 
   return {
     state: state,
+    getBaseUrl: function () { return BASE_URL; },
+    getDisplayBaseUrl: function () { return BASE_URL || window.location.origin; },
     healthCheck: healthCheck,
     getConfig: getConfig,
     storeBlob: storeBlob,

@@ -71,6 +71,7 @@ var Dashboard = (function () {
 
 
     setText('insp-conn-status', connected ? 'connected' : 'disconnected');
+    setText('insp-server-url', state.apiBaseUrl || MemwalAPI.getDisplayBaseUrl());
     setText('insp-thread-id', state.lastThreadId || '—');
     setText('insp-blob-id', state.lastBlobId ? truncate(state.lastBlobId, 24) : '—');
     setText('insp-checkpoint-id', state.lastCheckpointId ? truncate(state.lastCheckpointId, 24) : '—');
@@ -140,6 +141,7 @@ var Dashboard = (function () {
 
   function populateConfig(config) {
     if (!config) return;
+    setInputVal('settings-base-url', MemwalAPI.getDisplayBaseUrl());
     setInputVal('settings-publisher', config.WALRUS_PUBLISHER || '');
     setInputVal('settings-aggregator', config.WALRUS_AGGREGATOR || '');
     setInputVal('settings-rpc', config.SUI_RPC_URL || '');

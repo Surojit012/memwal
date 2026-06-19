@@ -1,20 +1,41 @@
 {
   "version": 2,
-  "functions": {
-    "api/index.py": {
-      "includeFiles": "{playground/static/**,playground/svg/**}"
-    }
-  },
-  "builds": [
+  "rewrites": [
     {
-      "src": "api/index.py",
-      "use": "@vercel/python"
+      "source": "/",
+      "destination": "/playground/static/index.html"
+    },
+    {
+      "source": "/playground",
+      "destination": "/playground/static/playground.html"
+    },
+    {
+      "source": "/static/:path*",
+      "destination": "/playground/static/:path*"
+    },
+    {
+      "source": "/svg/:path*",
+      "destination": "/playground/svg/:path*"
     }
   ],
-  "routes": [
+  "headers": [
     {
-      "src": "/(.*)",
-      "dest": "api/index.py"
+      "source": "/static/:path*",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/svg/:path*",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
     }
   ]
 }
