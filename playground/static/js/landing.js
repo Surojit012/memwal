@@ -448,61 +448,124 @@
     initSmoothAnchors();
     initWorkflowAnimation();
     initWebglHeroText();
-    initHeroReveal();
+    initNetworkAnimation();
   });
 
-  function initHeroReveal() {
+  function initNetworkAnimation() {
+    var canvas = document.getElementById('hero-network-canvas');
+    if (!canvas) return;
+    var ctx = canvas.getContext('2d');
     var hero = document.getElementById('hero');
-    var revealLayer = document.getElementById('hero-reveal-layer');
-    if (!hero || !revealLayer) return;
-
-    var RADIUS = 400;
-    var currentX = -9999;
-    var currentY = -9999;
-    var targetX = -9999;
-    var targetY = -9999;
+    
+    var width, height;
+    var SPACING = 60;
+    var CONNECTION_RADIUS = SPACING * 2.5; // Connect to ~5x5 neighborhood
+    
+    var mouseX = -999;
+    var mouseY = -999;
     var isHovering = false;
-    var rafId = null;
+    var currentMouseX = -999;
+    var currentMouseY = -999;
 
-    function updateMask() {
-      currentX += (targetX - currentX) * 0.12;
-      currentY += (targetY - currentY) * 0.12;
-
-      var mask =
-        'radial-gradient(circle ' + RADIUS + 'px at ' +
-        currentX + 'px ' + currentY + 'px, ' +
-        'rgba(0, 0, 0, 0.25) 0%, transparent 60%)';
-
-      revealLayer.style.webkitMaskImage = mask;
-      revealLayer.style.maskImage = mask;
-
-      if (isHovering || Math.abs(targetX - currentX) > 0.5 || Math.abs(targetY - currentY) > 0.5) {
-        rafId = requestAnimationFrame(updateMask);
-      } else {
-        rafId = null;
-      }
+    function resize() {
+      var rect = hero.getBoundingClientRect();
+      var dpr = window.devicePixelRatio || 1;
+      width = rect.width;
+      height = rect.height;
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      ctx.scale(dpr, dpr);
     }
 
-    hero.addEventListener('mousemove', function (e) {
+    function render() {
+      ctx.clearRect(0, 0, width, height);
+      
+      // Smooth mouse movement
+      if (isHovering) {
+        if (currentMouseX === -999) {
+          currentMouseX = mouseX;
+          currentMouseY = mouseY;
+        } else {
+          currentMouseX += (mouseX - currentMouseX) * 0.2;
+          currentMouseY += (mouseY - currentMouseY) * 0.2;
+        }
+      }
+
+      var cols = Math.ceil(width / SPACING) + 1;
+      var rows = Math.ceil(height / SPACING) + 1;
+
+      // Draw grid points
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+      for (var i = 0; i < cols; i++) {
+        for (var j = 0; j < rows; j++) {
+          var x = i * SPACING;
+          var y = j * SPACING;
+          
+          ctx.beginPath();
+          ctx.arc(x, y, 1.5, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      // Draw connections and mouse node
+      if (isHovering && currentMouseX !== -999) {
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+        ctx.lineWidth = 1.5;
+        
+        for (var i = 0; i < cols; i++) {
+          for (var j = 0; j < rows; j++) {
+            var x = i * SPACING;
+            var y = j * SPACING;
+            
+            var dx = x - currentMouseX;
+            var dy = y - currentMouseY;
+            var dist = Math.sqrt(dx * dx + dy * dy);
+            
+            if (dist < CONNECTION_RADIUS) {
+              var opacity = 1 - (dist / CONNECTION_RADIUS);
+              ctx.strokeStyle = 'rgba(255, 255, 255, ' + (opacity * 0.6) + ')';
+              ctx.beginPath();
+              ctx.moveTo(currentMouseX, currentMouseY);
+              ctx.lineTo(x, y);
+              ctx.stroke();
+            }
+          }
+        }
+        
+        // Draw the main mouse node
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.arc(currentMouseX, currentMouseY, 5, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Inner glow for mouse node
+        var grd = ctx.createRadialGradient(currentMouseX, currentMouseY, 0, currentMouseX, currentMouseY, 15);
+        grd.addColorStop(0, 'rgba(255, 255, 255, 0.4)');
+        grd.addColorStop(1, 'rgba(255, 255, 255, 0)');
+        ctx.fillStyle = grd;
+        ctx.beginPath();
+        ctx.arc(currentMouseX, currentMouseY, 15, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      requestAnimationFrame(render);
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+    requestAnimationFrame(render);
+
+    hero.addEventListener('mousemove', function(e) {
       var rect = hero.getBoundingClientRect();
-      targetX = e.clientX - rect.left;
-      targetY = e.clientY - rect.top;
-
-      if (!isHovering) {
-        isHovering = true;
-        currentX = targetX;
-        currentY = targetY;
-      }
-
-      if (!rafId) {
-        rafId = requestAnimationFrame(updateMask);
-      }
+      mouseX = e.clientX - rect.left;
+      mouseY = e.clientY - rect.top;
+      isHovering = true;
     });
 
-    hero.addEventListener('mouseleave', function () {
+    hero.addEventListener('mouseleave', function() {
       isHovering = false;
-      revealLayer.style.webkitMaskImage = 'radial-gradient(circle 0px at 50% 50%, black 0%, transparent 0%)';
-      revealLayer.style.maskImage = 'radial-gradient(circle 0px at 50% 50%, black 0%, transparent 0%)';
+      currentMouseX = -999;
+      currentMouseY = -999;
     });
   }
 
