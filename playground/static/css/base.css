@@ -394,9 +394,9 @@ table {
 }
 
 .badge--success {
-  background: rgba(207, 187, 153, 0.12);
+  background: rgba(125, 160, 202, 0.12);
   color: var(--status-success);
-  border: 1px solid rgba(207, 187, 153, 0.2);
+  border: 1px solid rgba(125, 160, 202, 0.2);
 }
 
 .badge--error {
@@ -454,7 +454,7 @@ table {
 
 .dot--success {
   background: var(--status-success);
-  box-shadow: 0 0 6px rgba(207, 187, 153, 0.4);
+  box-shadow: 0 0 6px rgba(125, 160, 202, 0.4);
 }
 
 .dot--error {

@@ -970,7 +970,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(10, 10, 11, 0.8);
+  background: rgba(2, 16, 36, 0.8);
   z-index: var(--z-overlay);
 }
 

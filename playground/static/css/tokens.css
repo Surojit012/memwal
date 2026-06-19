@@ -2,48 +2,48 @@
 
 :root {
   
-  --bg-root:        #0b0d08;
-  --bg-surface:     #15180f;
-  --bg-raised:      #1f2418;
-  --bg-elevated:    #2a311f;
-  --bg-overlay:     rgba(11, 13, 8, 0.92);
-  --bg-input:       #11140d;
-  --bg-code:        #10130c;
+  --bg-root:        #021024;
+  --bg-surface:     #041a36;
+  --bg-raised:      #052659;
+  --bg-elevated:    #0a3270;
+  --bg-overlay:     rgba(2, 16, 36, 0.92);
+  --bg-input:       #031530;
+  --bg-code:        #02122a;
 
   
-  --border-default: #354024;
-  --border-subtle:  #252d1a;
-  --border-strong:  #4c3d19;
-  --border-hover:   #889063;
-  --border-focus:   #cfbb99;
+  --border-default: #0e3d7a;
+  --border-subtle:  #0a2e5e;
+  --border-strong:  #5483B3;
+  --border-hover:   #7DA0CA;
+  --border-focus:   #C1E8FF;
 
   
-  --text-primary:   #e5d7c4;
-  --text-secondary: #cfbb99;
-  --text-tertiary:  #889063;
-  --text-muted:     #626946;
-  --text-inverse:   #0b0d08;
+  --text-primary:   #C1E8FF;
+  --text-secondary: #7DA0CA;
+  --text-tertiary:  #5483B3;
+  --text-muted:     #3a6696;
+  --text-inverse:   #021024;
 
   
-  --accent:         #cfbb99;
-  --accent-hover:   #e5d7c4;
-  --accent-muted:   rgba(207, 187, 153, 0.16);
-  --accent-text:    #cfbb99;
-  --accent-dim:     #889063;
+  --accent:         #7DA0CA;
+  --accent-hover:   #C1E8FF;
+  --accent-muted:   rgba(125, 160, 202, 0.16);
+  --accent-text:    #7DA0CA;
+  --accent-dim:     #5483B3;
 
   
-  --status-success: #889063;
+  --status-success: #5483B3;
   --status-error:   #b66a4d;
-  --status-warning: #cfbb99;
-  --status-info:    #e5d7c4;
+  --status-warning: #7DA0CA;
+  --status-info:    #C1E8FF;
 
   
-  --syntax-key:     #cfbb99;
-  --syntax-string:  #889063;
-  --syntax-number:  #e5d7c4;
+  --syntax-key:     #7DA0CA;
+  --syntax-string:  #5483B3;
+  --syntax-number:  #C1E8FF;
   --syntax-bool:    #b66a4d;
-  --syntax-null:    #626946;
-  --syntax-bracket: #889063;
+  --syntax-null:    #3a6696;
+  --syntax-bracket: #5483B3;
 
   
   --font-sans:      'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
@@ -101,11 +101,11 @@
   --radius-full: 999px;
 
   
-  --shadow-xs:   0 1px 2px rgba(0, 0, 0, 0.25);
-  --shadow-sm:   0 2px 4px rgba(0, 0, 0, 0.3);
-  --shadow-md:   0 4px 12px rgba(0, 0, 0, 0.35);
-  --shadow-lg:   0 8px 24px rgba(0, 0, 0, 0.4);
-  --shadow-glow: 0 0 20px rgba(207, 187, 153, 0.08);
+  --shadow-xs:   0 1px 2px rgba(0, 0, 0, 0.35);
+  --shadow-sm:   0 2px 4px rgba(0, 0, 0, 0.4);
+  --shadow-md:   0 4px 12px rgba(0, 0, 0, 0.45);
+  --shadow-lg:   0 8px 24px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 20px rgba(125, 160, 202, 0.12);
 
   
   --ease-default: cubic-bezier(0.25, 0.1, 0.25, 1);
