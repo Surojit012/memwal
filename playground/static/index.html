@@ -46,37 +46,76 @@
     <section class="hero" id="hero">
       <div class="hero__grid" aria-hidden="true"></div>
       <div class="hero__glow" aria-hidden="true"></div>
+      <canvas class="hero__webgl" id="hero-webgl-text" aria-hidden="true"></canvas>
 
       <div class="hero__content">
-        <div class="hero__eyebrow">
+        <div class="hero__copy">
+          <div class="hero__eyebrow">
+            <span class="hero__eyebrow-dot"></span>
+            <span>portable memory for agents</span>
+          </div>
+
+          <h1 class="hero__title">
+            Memory that<br />
+            survives the<br />
+            <span class="hero__title-accent">machine.</span>
+          </h1>
+
+          <p class="hero__subtitle">
+            MemWal persists LangGraph checkpoints on Walrus and maps every thread on Sui,
+            so an agent can stop here and resume anywhere.
+          </p>
+
+          <div class="hero__ctas">
+            <a href="/playground" class="hero__cta-primary" id="cta-playground">
+              Open Playground
+            </a>
+            <a href="https://memwal.mintlify.app/" target="_blank" rel="noopener" class="hero__cta-secondary"
+              id="cta-docs">
+              DOCS ↗
+            </a>
+          </div>
+
+          <div class="hero__tech-badges">
+            <span class="hero__tech-badge">walrus</span>
+            <span class="hero__tech-badge">sui</span>
+            <span class="hero__tech-badge">langgraph</span>
+            <span class="hero__tech-badge">msgpack</span>
+          </div>
         </div>
 
-        <h1 class="hero__title">
-          Persistent memory<br />
-          for <span class="hero__title-accent">AI agents</span>
-        </h1>
+        <div class="hero__artifact" aria-hidden="true">
+          <div class="hero__palette">
+            <span class="hero__swatch hero__swatch--cafe"></span>
+            <span class="hero__swatch hero__swatch--kombu"></span>
+            <span class="hero__swatch hero__swatch--moss"></span>
+            <span class="hero__swatch hero__swatch--tan"></span>
+            <span class="hero__swatch hero__swatch--bone"></span>
+          </div>
 
-        <p class="hero__subtitle">
-          Walrus-backed LangGraph checkpoint storage on Sui.
-          Store, retrieve, and manage agent memory across sessions —
-          decentralised, verifiable, permanent.
-        </p>
+          <div class="memory-stack">
+            <div class="memory-stack__row memory-stack__row--agent">
+              <span>agent</span>
+              <strong>LangGraph</strong>
+            </div>
+            <div class="memory-stack__row memory-stack__row--checkpoint">
+              <span>checkpoint</span>
+              <strong>msgpack state</strong>
+            </div>
+            <div class="memory-stack__row memory-stack__row--walrus">
+              <span>blob</span>
+              <strong>Walrus storage</strong>
+            </div>
+            <div class="memory-stack__row memory-stack__row--sui">
+              <span>registry</span>
+              <strong>Sui thread map</strong>
+            </div>
+          </div>
 
-        <div class="hero__ctas">
-          <a href="/playground" class="hero__cta-primary" id="cta-playground">
-            Open Playground
-          </a>
-          <a href="https://memwal.mintlify.app/" target="_blank" rel="noopener" class="hero__cta-secondary"
-            id="cta-docs">
-            DOCS ↗
-          </a>
-        </div>
-
-        <div class="hero__tech-badges">
-          <span class="hero__tech-badge">walrus</span>
-          <span class="hero__tech-badge">sui</span>
-          <span class="hero__tech-badge">langgraph</span>
-          <span class="hero__tech-badge">msgpack</span>
+          <div class="hero__proof-card">
+            <span>thread_id</span>
+            <strong>agent-001 → blob_id</strong>
+          </div>
         </div>
       </div>
     </section>
@@ -390,10 +429,10 @@ result <span class="op">=</span> graph<span class="op">.</span><span class="fn">
         </div>
 
         <div class="usecase-card">
-          <div class="usecase-card__icon"><svg fill="#FFFFFFF" width="55px" height="40px" viewBox="0 0 24 24"
+          <div class="usecase-card__icon"><svg fill="#FFFFFF" width="55px" height="40px" viewBox="0 0 24 24"
               id="research-left" data-name="Line Color" xmlns="http://www.w3.org/2000/svg" class="icon line-color">
               <path id="secondary" d="M7,17V12m4,5V15M21,15l-2.83-2.83M13,10a3,3,0,1,0,3-3A3,3,0,0,0,13,10Z"
-                style="fill: none; stroke: rgb(44, 169, 188); stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;">
+                style="fill: none; stroke: #cfbb99; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;">
               </path>
               <path id="primary" d="M17,17v3a1,1,0,0,1-1,1H4a1,1,0,0,1-1-1V4A1,1,0,0,1,4,3H16"
                 style="fill: none; stroke: rgb(255, 255, 255); stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;">
@@ -547,6 +586,9 @@ result <span class="op">=</span> graph<span class="op">.</span><span class="fn">
 
   </div>
 
+  <div class="page-transition" id="page-transition" aria-hidden="true"></div>
+
+  <script async src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
   <script src="/static/js/landing.js"></script>
 </body>
 

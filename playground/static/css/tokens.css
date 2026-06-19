@@ -2,48 +2,48 @@
 
 :root {
   
-  --bg-root:        #0a0a0b;
-  --bg-surface:     #111113;
-  --bg-raised:      #161618;
-  --bg-elevated:    #1c1c1f;
-  --bg-overlay:     rgba(10, 10, 11, 0.92);
-  --bg-input:       #0e0e10;
-  --bg-code:        #0c0c0e;
+  --bg-root:        #0b0d08;
+  --bg-surface:     #15180f;
+  --bg-raised:      #1f2418;
+  --bg-elevated:    #2a311f;
+  --bg-overlay:     rgba(11, 13, 8, 0.92);
+  --bg-input:       #11140d;
+  --bg-code:        #10130c;
 
   
-  --border-default: #1e1e22;
-  --border-subtle:  #16161a;
-  --border-strong:  #2a2a2e;
-  --border-hover:   #3a3a3f;
-  --border-focus:   #34d399;
+  --border-default: #354024;
+  --border-subtle:  #252d1a;
+  --border-strong:  #4c3d19;
+  --border-hover:   #889063;
+  --border-focus:   #cfbb99;
 
   
-  --text-primary:   #f0f0f0;
-  --text-secondary: #a0a0a6;
-  --text-tertiary:  #6b6b73;
-  --text-muted:     #4a4a52;
-  --text-inverse:   #0a0a0b;
+  --text-primary:   #e5d7c4;
+  --text-secondary: #cfbb99;
+  --text-tertiary:  #889063;
+  --text-muted:     #626946;
+  --text-inverse:   #0b0d08;
 
   
-  --accent:         #34d399;
-  --accent-hover:   #2cc48d;
-  --accent-muted:   rgba(52, 211, 153, 0.15);
-  --accent-text:    #34d399;
-  --accent-dim:     #1a7a54;
+  --accent:         #cfbb99;
+  --accent-hover:   #e5d7c4;
+  --accent-muted:   rgba(207, 187, 153, 0.16);
+  --accent-text:    #cfbb99;
+  --accent-dim:     #889063;
 
   
-  --status-success: #34d399;
-  --status-error:   #f87171;
-  --status-warning: #fbbf24;
-  --status-info:    #60a5fa;
+  --status-success: #889063;
+  --status-error:   #b66a4d;
+  --status-warning: #cfbb99;
+  --status-info:    #e5d7c4;
 
   
-  --syntax-key:     #c4b5fd;
-  --syntax-string:  #86efac;
-  --syntax-number:  #fbbf24;
-  --syntax-bool:    #f87171;
-  --syntax-null:    #6b6b73;
-  --syntax-bracket: #6b6b73;
+  --syntax-key:     #cfbb99;
+  --syntax-string:  #889063;
+  --syntax-number:  #e5d7c4;
+  --syntax-bool:    #b66a4d;
+  --syntax-null:    #626946;
+  --syntax-bracket: #889063;
 
   
   --font-sans:      'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
@@ -105,7 +105,7 @@
   --shadow-sm:   0 2px 4px rgba(0, 0, 0, 0.3);
   --shadow-md:   0 4px 12px rgba(0, 0, 0, 0.35);
   --shadow-lg:   0 8px 24px rgba(0, 0, 0, 0.4);
-  --shadow-glow: 0 0 20px rgba(52, 211, 153, 0.08);
+  --shadow-glow: 0 0 20px rgba(207, 187, 153, 0.08);
 
   
   --ease-default: cubic-bezier(0.25, 0.1, 0.25, 1);

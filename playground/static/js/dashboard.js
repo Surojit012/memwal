@@ -129,7 +129,7 @@ var Dashboard = (function () {
     if (sidebarDot) {
       sidebarDot.style.background = connected ? 'var(--status-success)' : 'var(--status-error)';
       sidebarDot.style.boxShadow = connected
-        ? '0 0 6px rgba(52,211,153,0.4)'
+        ? '0 0 6px rgba(207,187,153,0.4)'
         : '0 0 6px rgba(248,113,113,0.4)';
     }
     if (sidebarText) {
