@@ -9,3 +9,4 @@ cp playground/static/playground.html public/playground.html
 cp -R playground/static/css public/static/css
 cp -R playground/static/js public/static/js
 cp -R playground/svg/* public/svg/
+cp -R playground/static/img public/static/img
