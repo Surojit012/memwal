@@ -30,6 +30,13 @@
   margin-right: var(--sp-4);
 }
 
+.dash-header__logo {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  display: block;
+}
+
 .dash-header__brand-icon {
   width: 20px;
   height: 20px;
